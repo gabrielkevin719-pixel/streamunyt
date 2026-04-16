@@ -163,7 +163,7 @@ export function PricingSection({
                         alt={service}
                         width={32}
                         height={32}
-                        className="object-contain mix-blend-screen brightness-110"
+                        className="object-contain brightness-0 invert"
                       />
                     </div>
                   ))}

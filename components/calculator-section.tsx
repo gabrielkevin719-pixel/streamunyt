@@ -105,7 +105,7 @@ export function CalculatorSection() {
                     alt={service.name}
                     width={28}
                     height={28}
-                    className="object-contain mix-blend-screen brightness-110"
+                    className="object-contain brightness-0 invert"
                   />
                 </div>
 
@@ -139,7 +139,7 @@ export function CalculatorSection() {
                       alt={service.name}
                       width={24}
                       height={24}
-                      className="object-contain mix-blend-screen brightness-110"
+                      className="object-contain brightness-0 invert"
                     />
                   </div>
                 ))}

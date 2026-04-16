@@ -125,7 +125,7 @@ export function HeroSection() {
                     alt={service.name}
                     width={28}
                     height={28}
-                    className="object-contain mix-blend-screen brightness-110 w-auto h-auto max-w-full max-h-full"
+                    className="object-contain brightness-0 invert w-auto h-auto max-w-full max-h-full"
                   />
                 </div>
               ))}
@@ -218,7 +218,7 @@ export function HeroSection() {
                         alt={service.name}
                         width={40}
                         height={40}
-                        className="object-contain mix-blend-screen brightness-110 w-auto h-auto max-w-full max-h-full"
+                        className="object-contain brightness-0 invert w-auto h-auto max-w-full max-h-full"
                       />
                     </div>
                     {/* Tooltip */}
