@@ -4,29 +4,29 @@
 
 @layer base {
   :root {
-    --background: 222 47% 3%;
+    --background: 228 56% 5%;
     --foreground: 220 13% 91%;
-    --card: 222 39% 6%;
+    --card: 226 38% 7%;
     --card-foreground: 220 13% 91%;
-    --popover: 222 47% 5%;
+    --popover: 228 50% 6%;
     --popover-foreground: 220 13% 91%;
-    --primary: 24 95% 53%;
-    --primary-foreground: 222 47% 3%;
-    --secondary: 222 39% 12%;
+    --primary: 271 81% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 226 38% 12%;
     --secondary-foreground: 220 13% 91%;
-    --muted: 222 26% 15%;
+    --muted: 224 26% 15%;
     --muted-foreground: 220 9% 46%;
-    --accent: 197 89% 58%;
-    --accent-foreground: 222 47% 3%;
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 350 89% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 222 26% 16%;
-    --input: 222 26% 16%;
-    --ring: 24 95% 53%;
+    --border: 222 30% 16%;
+    --input: 222 30% 16%;
+    --ring: 271 81% 65%;
     --radius: 0.75rem;
-    --spark: 24 95% 53%;
-    --glow: 27 97% 67%;
-    --ice: 197 89% 58%;
+    --spark: 271 81% 65%;
+    --glow: 239 84% 67%;
+    --ice: 217 91% 60%;
     --mint: 160 64% 60%;
   }
 }
@@ -56,11 +56,11 @@ body::before {
 .shimmer-text {
   background: linear-gradient(
     90deg,
-    hsl(var(--spark)) 0%,
-    hsl(var(--glow)) 25%,
-    hsl(var(--spark)) 50%,
-    hsl(var(--glow)) 75%,
-    hsl(var(--spark)) 100%
+    #A855F7 0%,
+    #6366F1 25%,
+    #3B82F6 50%,
+    #6366F1 75%,
+    #A855F7 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

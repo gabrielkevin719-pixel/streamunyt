@@ -7,12 +7,20 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-glow rounded-lg flex items-center justify-center shadow-lg shadow-primary/40">
-                <span className="font-display text-lg text-background">S</span>
+            <Link href="/" className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 bg-[#0D1425] rounded-xl border border-[#1C2A44] flex items-center justify-center">
+                <svg width="18" height="20" viewBox="0 0 120 160" fill="none">
+                  <path d="M 90,10 C 115,10 20,55 50,65 L 80,72 L 50,80 C 20,88 115,130 90,140" stroke="url(#footerGrad)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <defs>
+                    <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#A855F7"/>
+                      <stop offset="100%" stopColor="#3B82F6"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
-              <span className="font-display text-xl tracking-wider">
-                StreamUnity
+              <span className="font-display text-xl tracking-wider italic">
+                STREAM<span className="bg-gradient-to-r from-[#A855F7] to-[#6366F1] bg-clip-text text-transparent">IX</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
@@ -95,7 +103,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            2024 StreamUnity. Prototipo conceitual para fins de estudo.
+            2026 Streamix. Prototipo conceitual para fins de estudo.
           </p>
           <div className="flex items-center gap-1">
             <span className="text-muted-foreground text-sm">Feito com</span>

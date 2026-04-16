@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import QRCode from "qrcode";
+import { createCashIn } from "@/lib/syncpay";
 
 // Plan prices in BRL
 const PLANOS: Record<string, { nome: string; valor: number }> = {
-  basico: { nome: "Basico Essencial", valor: 69.00 },
-  premium: { nome: "Premium Total", valor: 109.00 },
-  ultra: { nome: "Ultra Maximo", valor: 149.00 },
+  basico: { nome: "Basico Essencial", valor: 69.0 },
+  premium: { nome: "Premium Total", valor: 109.0 },
+  ultra: { nome: "Ultra Maximo", valor: 149.0 },
 };
 
-// Generate demo PIX response when API key is not configured
+// Generate demo PIX response when credentials are not configured
 async function generateDemoPixResponse(
   planoData: { nome: string; valor: number },
   correlationID: string,
@@ -37,7 +38,8 @@ async function generateDemoPixResponse(
     valor: planoData.valor.toFixed(2),
     plano: planoData.nome,
     status: "PENDING",
-    message: "MODO DEMO - Configure SYNCPAY_API_KEY para pagamentos reais.",
+    message:
+      "MODO DEMO - Configure SYNCPAY_CLIENT_ID e SYNCPAY_CLIENT_SECRET para pagamentos reais.",
   };
 }
 
@@ -67,10 +69,11 @@ export async function POST(request: NextRequest) {
     const planoData = PLANOS[plano];
     const correlationID = `su-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    // Check if SyncPay API key is configured
-    const apiKey = process.env.SYNCPAY_API_KEY;
+    // Check if SyncPay credentials are configured
+    const clientId = process.env.SYNCPAY_CLIENT_ID;
+    const clientSecret = process.env.SYNCPAY_CLIENT_SECRET;
 
-    if (!apiKey) {
+    if (!clientId || !clientSecret) {
       // Return demo response
       const demoResponse = await generateDemoPixResponse(
         planoData,
@@ -83,45 +86,21 @@ export async function POST(request: NextRequest) {
 
     // Call SyncPay API - Cash-in (deposit via PIX)
     try {
-      const baseUrl = process.env.SYNCPAY_API_URL || "https://api.syncpayments.com.br";
-      const webhookUrl = process.env.SYNCPAY_WEBHOOK_URL || `${request.nextUrl.origin}/api/webhook/syncpay`;
+      const webhookUrl =
+        process.env.SYNCPAY_WEBHOOK_URL ||
+        `${request.nextUrl.origin}/api/webhook/syncpay`;
 
-      const syncpayRes = await fetch(`${baseUrl}/api/partner/v1/cash-in`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-          "Accept": "application/json",
+      const syncpayData = await createCashIn({
+        amount: planoData.valor,
+        description: `StreamUnity - Plano ${planoData.nome}`,
+        webhookUrl,
+        client: {
+          name: name,
+          cpf: cpf?.replace(/\D/g, "") || "00000000000",
+          email: email,
+          phone: phone?.replace(/\D/g, "") || "11999999999",
         },
-        body: JSON.stringify({
-          amount: planoData.valor,
-          description: `StreamUnity - Plano ${planoData.nome}`,
-          webhook_url: webhookUrl,
-          client: {
-            name: name,
-            cpf: cpf?.replace(/\D/g, "") || "00000000000",
-            email: email,
-            phone: phone?.replace(/\D/g, "") || "11999999999",
-          },
-        }),
       });
-
-      const syncpayData = await syncpayRes.json();
-
-      if (!syncpayRes.ok || syncpayData.message === "Unauthenticated.") {
-        console.error("SyncPay error:", syncpayData);
-        // Fallback to demo mode if API fails
-        const demoResponse = await generateDemoPixResponse(
-          planoData,
-          correlationID,
-          name,
-          email
-        );
-        return NextResponse.json({
-          ...demoResponse,
-          message: `Erro na API SyncPay: ${syncpayData.message || "Erro desconhecido"}. Usando modo demo.`,
-        });
-      }
 
       // Generate QR Code image from pix_code
       const qrCodeImage = await QRCode.toDataURL(syncpayData.pix_code, {
@@ -143,7 +122,7 @@ export async function POST(request: NextRequest) {
         status: "PENDING",
       });
     } catch (err) {
-      console.error("SyncPay connection error:", err);
+      console.error("SyncPay error:", err);
       const demoResponse = await generateDemoPixResponse(
         planoData,
         correlationID,
@@ -152,7 +131,7 @@ export async function POST(request: NextRequest) {
       );
       return NextResponse.json({
         ...demoResponse,
-        message: "Erro de conexao com SyncPay. Usando modo demo.",
+        message: `Erro na API SyncPay: ${err instanceof Error ? err.message : "Erro desconhecido"}. Usando modo demo.`,
       });
     }
   } catch (err) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getTransactionStatus } from "@/lib/syncpay";
 
 export async function GET(
   request: NextRequest,
@@ -7,9 +8,10 @@ export async function GET(
   const { correlationID } = await params;
 
   try {
-    const apiKey = process.env.SYNCPAY_API_KEY;
+    const clientId = process.env.SYNCPAY_CLIENT_ID;
+    const clientSecret = process.env.SYNCPAY_CLIENT_SECRET;
 
-    if (!apiKey) {
+    if (!clientId || !clientSecret) {
       // Demo mode - return pending status
       return NextResponse.json({
         status: "PENDING",
@@ -18,48 +20,24 @@ export async function GET(
       });
     }
 
-    const baseUrl = process.env.SYNCPAY_API_URL || "https://api.syncpayments.com.br";
-
-    // Call SyncPay API to check transaction status
-    const syncpayRes = await fetch(
-      `${baseUrl}/api/partner/v1/transactions/${correlationID}`,
-      {
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Accept": "application/json",
-        },
-      }
-    );
-
-    const data = await syncpayRes.json();
-
-    if (!syncpayRes.ok) {
-      console.error("SyncPay status check error:", data);
-      return NextResponse.json({
-        status: "PENDING",
-        paidAt: null,
-        error: data.message,
-      });
-    }
+    const data = await getTransactionStatus(correlationID);
 
     // Map SyncPay status to our status format
-    // SyncPay statuses: pending, processing, completed, failed, expired
+    // SyncPay statuses: pending, completed, failed, refunded, med
     const statusMap: Record<string, string> = {
       pending: "PENDING",
-      processing: "PROCESSING",
       completed: "COMPLETED",
-      paid: "COMPLETED",
       failed: "FAILED",
-      expired: "EXPIRED",
-      cancelled: "CANCELLED",
+      refunded: "REFUNDED",
+      med: "MED",
     };
 
-    const status = statusMap[data.status?.toLowerCase()] || data.status || "PENDING";
+    const status = statusMap[data.status] || data.status?.toUpperCase() || "PENDING";
 
     return NextResponse.json({
       status,
-      paidAt: data.paid_at || data.completed_at || null,
-      identifier: data.identifier,
+      paidAt: data.transaction_date || null,
+      identifier: data.reference_id,
       amount: data.amount,
     });
   } catch (err) {

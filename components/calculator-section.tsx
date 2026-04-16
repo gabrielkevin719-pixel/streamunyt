@@ -7,7 +7,7 @@ import Image from "next/image";
 const services = [
   { id: "netflix", name: "Netflix", price: 29.9, logo: "/logos/netflix.png" },
   { id: "spotify", name: "Spotify", price: 21.9, logo: "/logos/spotify.png" },
-  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.jpg" },
+  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.png" },
   { id: "hbomax", name: "HBO Max", price: 34.9, logo: "/logos/hbo-max.png" },
   { id: "tnt", name: "TNT Sports", price: 29.9, logo: "/logos/tnt-sports.png" },
   { id: "amazon", name: "Amazon Prime", price: 19.9, logo: "/logos/prime-video.png" },
@@ -31,16 +31,16 @@ export function CalculatorSection() {
     .filter((s) => selected.includes(s.id))
     .reduce((acc, s) => acc + s.price, 0);
 
-  // StreamUnity pricing logic
-  const getStreamUnityPrice = () => {
+  // Streamix pricing logic
+  const getStreamixPrice = () => {
     const count = selected.length;
-    if (count <= 3) return 69;
-    if (count <= 5) return 109;
-    return 149;
+    if (count <= 3) return 50;
+    if (count <= 5) return 79.9;
+    return 129.9;
   };
 
-  const streamUnityPrice = getStreamUnityPrice();
-  const savings = totalIndividual - streamUnityPrice;
+  const streamixPrice = getStreamixPrice();
+  const savings = totalIndividual - streamixPrice;
 
   return (
     <section id="calculadora" className="py-32 px-6 relative">
@@ -99,7 +99,7 @@ export function CalculatorSection() {
                 </div>
 
                 {/* Service logo */}
-                <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden flex-shrink-0 p-1.5">
+                <div className="w-10 h-10 rounded-lg bg-transparent backdrop-blur-sm flex items-center justify-center overflow-hidden flex-shrink-0 p-1.5">
                   <Image
                     src={service.logo}
                     alt={service.name}
@@ -131,7 +131,7 @@ export function CalculatorSection() {
                 .map((service) => (
                   <div
                     key={service.id}
-                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden p-1"
+                    className="w-8 h-8 rounded-lg bg-transparent flex items-center justify-center overflow-hidden p-1"
                     title={service.name}
                   >
                     <Image
@@ -147,7 +147,7 @@ export function CalculatorSection() {
           )}
 
           {/* Total bar */}
-          <div className="bg-gradient-to-r from-primary/15 to-glow/5 border border-primary/30 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-[#A855F7]/15 to-[#3B82F6]/5 border border-[#A855F7]/30 rounded-2xl p-6">
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
                 <p className="font-mono text-xs text-muted-foreground mb-2 tracking-wider">
@@ -159,10 +159,10 @@ export function CalculatorSection() {
               </div>
               <div>
                 <p className="font-mono text-xs text-muted-foreground mb-2 tracking-wider">
-                  PAGA COM STREAMUNITY
+                  PAGA COM STREAMIX
                 </p>
                 <p className="font-display text-3xl text-primary">
-                  R${streamUnityPrice.toFixed(2).replace(".", ",")}
+                  R${streamixPrice.toFixed(2).replace(".", ",")}
                 </p>
               </div>
               <div>

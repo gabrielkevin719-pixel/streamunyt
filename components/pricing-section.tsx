@@ -11,8 +11,8 @@ const serviceLogos: Record<string, string> = {
   "Spotify Premium": "/logos/spotify.png",
   "Spotify Premium Familia": "/logos/spotify.png",
   "Amazon Prime Video": "/logos/prime-video.png",
-  "Disney+ (Padrao)": "/logos/disney-plus.jpg",
-  "Disney+ (Premium)": "/logos/disney-plus.jpg",
+  "Disney+ (Padrao)": "/logos/disney-plus.png",
+  "Disney+ (Premium)": "/logos/disney-plus.png",
   "HBO Max (Padrao)": "/logos/hbo-max.png",
   "TNT Sports": "/logos/tnt-sports.png",
   "YouTube Premium": "/logos/youtube.png",
@@ -24,7 +24,8 @@ const plans = [
     name: "Basico",
     subtitle: "Essencial",
     description: "Para quem quer o melhor em video e musica",
-    price: 69,
+    price: 50,
+    originalPrice: 71.7,
     services: [
       "Netflix (Padrao)",
       "Spotify Premium",
@@ -40,7 +41,8 @@ const plans = [
     name: "Premium",
     subtitle: "Total",
     description: "O pacote mais popular com tudo incluso",
-    price: 109,
+    price: 79.9,
+    originalPrice: 134.5,
     services: [
       "Netflix (Premium 4K)",
       "Spotify Premium",
@@ -50,7 +52,7 @@ const plans = [
     ],
     badge: "MAIS POPULAR",
     badgeColor: "bg-primary/20 text-primary border-primary/40",
-    cardClass: "bg-gradient-to-br from-primary via-glow to-primary",
+    cardClass: "bg-gradient-to-br from-[#A855F7] via-[#6366F1] to-[#3B82F6]",
     featured: true,
   },
   {
@@ -58,7 +60,8 @@ const plans = [
     name: "Ultra",
     subtitle: "Maximo",
     description: "Para toda a familia com esportes ao vivo",
-    price: 149,
+    price: 129.9,
+    originalPrice: 185.3,
     services: [
       "Netflix (Premium 4K)",
       "Spotify Premium Familia",
@@ -86,7 +89,7 @@ export function PricingSection({
       className="py-32 px-6 relative"
       style={{
         background:
-          "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(249,115,22,0.05), transparent)",
+          "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(168,85,247,0.06), transparent)",
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -136,26 +139,36 @@ export function PricingSection({
                 </p>
 
                 {/* Price */}
-                <div className="mb-2">
+                <div className="mb-1">
                   <span
                     className={cn(
-                      "font-display text-6xl leading-none",
+                      "font-display text-5xl md:text-6xl leading-none",
                       plan.featured ? "shimmer-text" : "text-foreground"
                     )}
                   >
-                    R${plan.price}
+                    R${plan.price.toFixed(2).replace(".", ",")}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-sm mb-8">
+                <p className="text-muted-foreground text-sm mb-2">
                   /mes - cobrado mensalmente
                 </p>
+                {plan.originalPrice && (
+                  <p className="text-sm mb-6">
+                    <span className="text-muted-foreground line-through mr-2">
+                      R${plan.originalPrice.toFixed(2).replace(".", ",")}
+                    </span>
+                    <span className="text-mint font-bold">
+                      Economia de R${(plan.originalPrice - plan.price).toFixed(2).replace(".", ",")}/mes
+                    </span>
+                  </p>
+                )}
 
                 {/* Service Logos Grid */}
                 <div className="flex flex-wrap gap-3 mb-6 pb-6 border-b border-border">
                   {plan.services.map((service) => (
                     <div
                       key={service}
-                      className="relative w-10 h-10 rounded-lg bg-white/10 p-1.5 flex items-center justify-center overflow-hidden"
+                      className="relative w-10 h-10 rounded-lg bg-transparent p-1.5 flex items-center justify-center overflow-hidden"
                       title={service}
                     >
                       <Image
@@ -193,7 +206,7 @@ export function PricingSection({
                   className={cn(
                     "w-full py-4 rounded-xl font-bold text-sm transition-all",
                     plan.featured
-                      ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50"
+                      ? "bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white shadow-lg shadow-[#A855F7]/30 hover:shadow-[#A855F7]/50"
                       : "bg-secondary text-foreground hover:bg-secondary/80"
                   )}
                 >
