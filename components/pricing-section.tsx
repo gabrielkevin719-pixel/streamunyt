@@ -2,6 +2,21 @@
 
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
+// Logo mapping for streaming services
+const serviceLogos: Record<string, string> = {
+  "Netflix (Padrao)": "/logos/netflix.png",
+  "Netflix (Premium 4K)": "/logos/netflix.png",
+  "Spotify Premium": "/logos/spotify.png",
+  "Spotify Premium Familia": "/logos/spotify.png",
+  "Amazon Prime Video": "/logos/prime-video.png",
+  "Disney+ (Padrao)": "/logos/disney-plus.jpg",
+  "Disney+ (Premium)": "/logos/disney-plus.jpg",
+  "HBO Max (Padrao)": "/logos/hbo-max.png",
+  "TNT Sports": "/logos/tnt-sports.png",
+  "YouTube Premium": "/logos/youtube.png",
+};
 
 const plans = [
   {
@@ -135,8 +150,27 @@ export function PricingSection({
                   /mes - cobrado mensalmente
                 </p>
 
+                {/* Service Logos Grid */}
+                <div className="flex flex-wrap gap-3 mb-6 pb-6 border-b border-border">
+                  {plan.services.map((service) => (
+                    <div
+                      key={service}
+                      className="relative w-10 h-10 rounded-lg bg-white/10 p-1.5 flex items-center justify-center overflow-hidden"
+                      title={service}
+                    >
+                      <Image
+                        src={serviceLogos[service]}
+                        alt={service}
+                        width={32}
+                        height={32}
+                        className="object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+
                 {/* Services list */}
-                <div className="border-t border-border pt-6 mb-6 flex-1">
+                <div className="mb-6 flex-1">
                   <p className="font-mono text-xs text-muted-foreground mb-4 tracking-wider">
                     INCLUI
                   </p>
