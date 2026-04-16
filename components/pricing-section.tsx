@@ -155,7 +155,7 @@ export function PricingSection({
                   {plan.services.map((service) => (
                     <div
                       key={service}
-                      className="relative w-10 h-10 rounded-lg bg-white/10 p-1.5 flex items-center justify-center overflow-hidden"
+                      className="relative w-10 h-10 rounded-lg bg-transparent p-1.5 flex items-center justify-center overflow-hidden"
                       title={service}
                     >
                       <Image
@@ -163,7 +163,7 @@ export function PricingSection({
                         alt={service}
                         width={32}
                         height={32}
-                        className="object-contain"
+                        className="object-contain mix-blend-screen brightness-110"
                       />
                     </div>
                   ))}

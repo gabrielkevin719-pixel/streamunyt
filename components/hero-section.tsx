@@ -98,7 +98,7 @@ export function HeroSection() {
               {services.map((service) => (
                 <div
                   key={service.name}
-                  className="relative w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden flex items-center justify-center p-1.5 hover:scale-110 transition-transform"
+                  className="relative w-10 h-10 rounded-lg bg-transparent backdrop-blur-sm border border-white/20 overflow-hidden flex items-center justify-center p-1.5 hover:scale-110 transition-transform"
                   title={service.name}
                 >
                   <Image
@@ -106,7 +106,7 @@ export function HeroSection() {
                     alt={service.name}
                     width={28}
                     height={28}
-                    className="object-contain"
+                    className="object-contain mix-blend-screen brightness-110"
                   />
                 </div>
               ))}
@@ -189,7 +189,7 @@ export function HeroSection() {
                     }}
                   >
                     <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden shadow-lg bg-white/10 backdrop-blur-sm p-2"
+                      className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden shadow-lg bg-transparent backdrop-blur-sm p-2"
                       style={{
                         border: `2px solid ${service.color}60`,
                         boxShadow: `0 0 20px ${service.color}30`,
@@ -200,7 +200,7 @@ export function HeroSection() {
                         alt={service.name}
                         width={40}
                         height={40}
-                        className="object-contain"
+                        className="object-contain mix-blend-screen brightness-110"
                       />
                     </div>
                     {/* Tooltip */}

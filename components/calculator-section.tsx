@@ -99,13 +99,13 @@ export function CalculatorSection() {
                 </div>
 
                 {/* Service logo */}
-                <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden flex-shrink-0 p-1.5">
+                <div className="w-10 h-10 rounded-lg bg-transparent backdrop-blur-sm flex items-center justify-center overflow-hidden flex-shrink-0 p-1.5">
                   <Image
                     src={service.logo}
                     alt={service.name}
                     width={28}
                     height={28}
-                    className="object-contain"
+                    className="object-contain mix-blend-screen brightness-110"
                   />
                 </div>
 
@@ -131,7 +131,7 @@ export function CalculatorSection() {
                 .map((service) => (
                   <div
                     key={service.id}
-                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden p-1"
+                    className="w-8 h-8 rounded-lg bg-transparent flex items-center justify-center overflow-hidden p-1"
                     title={service.name}
                   >
                     <Image
@@ -139,7 +139,7 @@ export function CalculatorSection() {
                       alt={service.name}
                       width={24}
                       height={24}
-                      className="object-contain"
+                      className="object-contain mix-blend-screen brightness-110"
                     />
                   </div>
                 ))}
