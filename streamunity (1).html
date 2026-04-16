@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StreamUnity — Um Plano. Tudo que Você Ama.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Bebas Neue"', 'cursive'],
+          body: ['"DM Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          void: '#030712',
+          surface: '#0d1117',
+          panel: '#161b22',
+          border: '#21262d',
+          spark: '#F97316',
+          glow: '#FB923C',
+          ice: '#38BDF8',
+          mint: '#34D399',
+          crimson: '#F43F5E',
+          muted: '#6B7280',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --spark: #F97316;
+    --glow: #FB923C;
+    --ice: #38BDF8;
+    --mint: #34D399;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #030712;
+    color: #E5E7EB;
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* HERO GRADIENT MESH */
+  .hero-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(249,115,22,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 70%, rgba(56,189,248,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 50% 0%, rgba(251,146,60,0.06) 0%, transparent 50%),
+      #030712;
+  }
+
+  /* TYPEWRITER EFFECT */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor { animation: blink 1s step-end infinite; }
+
+  /* FLOAT */
+  @keyframes float {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-12px) rotate(1deg); }
+    66% { transform: translateY(-6px) rotate(-0.5deg); }
+  }
+
+  /* SHIMMER */
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  .shimmer-text {
+    background: linear-gradient(90deg, #F97316 0%, #FBBF24 25%, #F97316 50%, #FB923C 75%, #F97316 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
+
+  /* SLIDE IN */
+  @keyframes slideUp {
+    from { opacity:0; transform: translateY(40px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity:0; } to { opacity:1; }
+  }
+  .animate-slide { animation: slideUp 0.7s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.25s; }
+  .delay-3 { animation-delay: 0.4s; }
+  .delay-4 { animation-delay: 0.55s; }
+
+  /* GLASS CARDS */
+  .glass {
+    background: rgba(22,27,34,0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(33,38,45,0.8);
+  }
+  .glass-spark {
+    background: rgba(249,115,22,0.06);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(249,115,22,0.25);
+  }
+
+  /* NAV */
+  nav { position: fixed; top:0; left:0; right:0; z-index:100; }
+  .nav-inner {
+    background: rgba(3,7,18,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(33,38,45,0.6);
+  }
+
+  /* LOGO */
+  .logo-mark {
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .logo-icon {
+    width:32px; height:32px;
+    background: linear-gradient(135deg, #F97316, #FBBF24);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family: 'Bebas Neue'; font-size:18px; color:#030712;
+    box-shadow: 0 0 20px rgba(249,115,22,0.4);
+  }
+
+  /* HERO HEADLINE */
+  .hero-headline {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(56px, 9vw, 140px);
+    line-height: 0.92;
+    letter-spacing: -1px;
+  }
+
+  /* SERVICE PILL */
+  .service-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 6px 14px;
+    border-radius:99px;
+    font-size:13px; font-weight:500;
+    transition: all 0.2s;
+  }
+
+  /* PLAN CARD */
+  .plan-card {
+    position:relative; border-radius:20px; padding:2px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .plan-card:hover { transform: translateY(-6px); }
+  .plan-card.featured {
+    background: linear-gradient(135deg, #F97316, #FBBF24, #F97316);
+    box-shadow: 0 20px 60px rgba(249,115,22,0.3);
+  }
+  .plan-card.featured:hover {
+    box-shadow: 0 30px 80px rgba(249,115,22,0.45);
+  }
+  .plan-card.basic { background: linear-gradient(135deg, #21262d, #30363d); }
+  .plan-card.ultra { background: linear-gradient(135deg, #21262d, #38BDF8 200%); }
+  .plan-inner {
+    background: #0d1117;
+    border-radius:18px;
+    padding:32px;
+    height:100%;
+  }
+  .plan-price {
+    font-family: 'Bebas Neue'; font-size:64px; line-height:1;
+    letter-spacing:-1px;
+  }
+
+  /* CHECKLIST ITEM */
+  .service-check {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 16px; border-radius:12px;
+    cursor:pointer; user-select:none;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .service-check:hover { background: rgba(249,115,22,0.06); border-color:rgba(249,115,22,0.2); }
+  .service-check input { display:none; }
+  .check-box {
+    width:22px; height:22px; border-radius:6px;
+    border:2px solid #374151;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    transition: all 0.2s;
+  }
+  .service-check.active .check-box {
+    background: #F97316; border-color:#F97316;
+  }
+  .service-check.active { background: rgba(249,115,22,0.08); border-color:rgba(249,115,22,0.3); }
+
+  /* CALCULATOR TOTAL */
+  .total-bar {
+    background: linear-gradient(90deg, rgba(249,115,22,0.15), rgba(251,146,60,0.05));
+    border: 1px solid rgba(249,115,22,0.3);
+    border-radius:16px; padding:24px 32px;
+  }
+
+  /* TABLE */
+  .compare-table { border-collapse:separate; border-spacing:0; width:100%; }
+  .compare-table th { padding:16px 20px; font-family:'Bebas Neue'; font-size:18px; letter-spacing:1px; }
+  .compare-table td { padding:14px 20px; border-top:1px solid #21262d; font-size:14px; }
+  .compare-table tr:hover td { background: rgba(249,115,22,0.03); }
+
+  /* AI ADVISOR SECTION */
+  .ai-panel {
+    background: linear-gradient(135deg, rgba(22,27,34,0.9), rgba(13,17,23,0.95));
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius:24px;
+    padding:40px;
+    position:relative; overflow:hidden;
+  }
+  .ai-panel::before {
+    content:'';
+    position:absolute; top:-50%; right:-20%;
+    width:400px; height:400px;
+    background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 60%);
+    pointer-events:none;
+  }
+
+  .ai-input {
+    background: rgba(33,38,45,0.8);
+    border: 1px solid #21262d;
+    border-radius:12px;
+    padding:14px 20px;
+    color:#E5E7EB; font-family:'DM Sans'; font-size:15px;
+    width:100%; outline:none;
+    transition: border-color 0.2s;
+  }
+  .ai-input:focus { border-color: rgba(56,189,248,0.5); box-shadow: 0 0 0 3px rgba(56,189,248,0.08); }
+  .ai-input::placeholder { color:#6B7280; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #F97316, #EA580C);
+    color:white; font-weight:700; font-size:15px;
+    padding:14px 28px; border-radius:12px; border:none;
+    cursor:pointer; transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+    white-space:nowrap;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow: 0 8px 30px rgba(249,115,22,0.45); }
+  .btn-primary:active { transform:translateY(0); }
+  .btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  .btn-ice {
+    background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(56,189,248,0.05));
+    border: 1px solid rgba(56,189,248,0.4);
+    color:#38BDF8; font-weight:600; font-size:14px;
+    padding:10px 20px; border-radius:10px; cursor:pointer;
+    transition: all 0.2s;
+  }
+  .btn-ice:hover { background: rgba(56,189,248,0.2); }
+
+  /* AI RESPONSE */
+  .ai-response {
+    background: rgba(13,17,23,0.8);
+    border: 1px solid rgba(56,189,248,0.15);
+    border-radius:16px; padding:24px;
+    font-size:15px; line-height:1.7;
+    display:none;
+  }
+  .ai-response.visible { display:block; animation: fadeIn 0.4s ease; }
+
+  /* TYPING DOTS */
+  @keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+  .typing-dot {
+    width:8px; height:8px; border-radius:50%; background:#38BDF8;
+    display:inline-block; margin:0 2px;
+  }
+  .typing-dot:nth-child(1){ animation: bounce 1.4s infinite 0s; }
+  .typing-dot:nth-child(2){ animation: bounce 1.4s infinite 0.2s; }
+  .typing-dot:nth-child(3){ animation: bounce 1.4s infinite 0.4s; }
+
+  /* STEPS */
+  .step-line {
+    position:absolute; left:28px; top:60px; bottom:-20px;
+    width:2px; background: linear-gradient(to bottom, rgba(249,115,22,0.5), transparent);
+  }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity:0; transform:translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* FOOTER */
+  .footer-link { color:#6B7280; font-size:13px; transition:color 0.2s; }
+  .footer-link:hover { color:#F97316; }
+
+  /* BADGE */
+  .badge {
+    font-family:'JetBrains Mono'; font-size:11px; font-weight:700;
+    padding:3px 10px; border-radius:4px; text-transform:uppercase; letter-spacing:1px;
+  }
+  .badge-orange { background:rgba(249,115,22,0.15); color:#F97316; border:1px solid rgba(249,115,22,0.3); }
+  .badge-ice { background:rgba(56,189,248,0.1); color:#38BDF8; border:1px solid rgba(56,189,248,0.3); }
+  .badge-mint { background:rgba(52,211,153,0.1); color:#34D399; border:1px solid rgba(52,211,153,0.3); }
+  .badge-red { background:rgba(244,63,94,0.1); color:#F43F5E; border:1px solid rgba(244,63,94,0.3); }
+
+  /* MARQUEE */
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-track { animation: marquee 25s linear infinite; display:flex; width:max-content; }
+  .marquee-wrap { overflow:hidden; }
+
+  /* GLOW ORBS background */
+  .orb {
+    position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0;
+  }
+
+  /* Horizontal rule spark */
+  .hr-spark {
+    border:none; height:1px;
+    background: linear-gradient(to right, transparent, rgba(249,115,22,0.5), transparent);
+  }
+
+  /* Section label */
+  .section-label {
+    font-family:'JetBrains Mono'; font-size:11px; font-weight:700;
+    letter-spacing:3px; text-transform:uppercase;
+    color:#F97316; margin-bottom:12px; display:block;
+  }
+
+  /* Responsive plan grid */
+  @media(max-width:768px) {
+    .plans-grid { grid-template-columns:1fr !important; }
+    .hero-headline { font-size:clamp(48px,14vw,80px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="logo-mark">
+        <div class="logo-icon">S</div>
+        <span style="font-family:'Bebas Neue'; font-size:22px; letter-spacing:2px;">StreamUnity</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#planos" class="footer-link hover:text-white transition-colors text-sm font-medium">Planos</a>
+        <a href="#como-funciona" class="footer-link hover:text-white transition-colors text-sm font-medium">Como Funciona</a>
+        <a href="#calculadora" class="footer-link hover:text-white transition-colors text-sm font-medium">Calculadora</a>
+        <a href="#ia-advisor" class="footer-link hover:text-white transition-colors text-sm font-medium">IA Advisor</a>
+        <a href="#viabilidade" class="footer-link hover:text-white transition-colors text-sm font-medium">Análise Legal</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="footer-link hover:text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 transition-all">Entrar</button>
+        <button class="btn-primary py-2 px-5 text-sm">Começar Grátis</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero-mesh relative min-h-screen flex flex-col justify-center pt-24 pb-20 px-6 overflow-hidden">
+  <!-- Orbs -->
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,0.08),transparent);top:-200px;left:-200px;"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(56,189,248,0.05),transparent);bottom:0;right:-100px;"></div>
+
+  <!-- Social proof top bar -->
+  <div class="relative z-10 max-w-7xl mx-auto w-full mb-16 animate-slide delay-1">
+    <div class="flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2 glass px-4 py-2 rounded-full">
+        <div style="width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 8px #34D399;animation:blink 2s infinite;"></div>
+        <span style="font-family:'JetBrains Mono'; font-size:11px; color:#34D399; letter-spacing:1px;">DEMO PROTÓTIPO</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div style="display:flex;margin-right:4px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#F97316,#FBBF24);border:2px solid #030712;"></div>
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#38BDF8,#818CF8);border:2px solid #030712;margin-left:-8px;"></div>
+          <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#34D399,#059669);border:2px solid #030712;margin-left:-8px;"></div>
+        </div>
+        <span style="font-size:13px;color:#9CA3AF;"><strong style="color:#E5E7EB;">+47.000</strong> pessoas na lista de espera</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main headline -->
+  <div class="relative z-10 max-w-7xl mx-auto w-full">
+    <div class="max-w-5xl">
+      <span class="section-label animate-slide delay-1">✦ O FIM DA BAGUNÇA DAS ASSINATURAS</span>
+      <h1 class="hero-headline animate-slide delay-2">
+        <span style="color:#E5E7EB;">UMA CONTA.</span><br/>
+        <span class="shimmer-text">TUDO JUNTO.</span><br/>
+        <span style="color:#E5E7EB;">MENOS NO FIM.</span>
+      </h1>
+      <p class="mt-8 text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed animate-slide delay-3" style="font-weight:300;">
+        StreamUnity agrega Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime e YouTube Premium em <strong style="color:#E5E7EB;">um único plano mensal</strong>. Economize até <strong style="color:#F97316;">R$127/mês</strong> e gerencie tudo em um dashboard.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4 animate-slide delay-4">
+        <button onclick="scrollToSection('planos')" class="btn-primary text-base px-8 py-4">
+          Ver Planos e Preços →
+        </button>
+        <button onclick="scrollToSection('calculadora')" class="btn-ice text-base px-8 py-4">
+          Calcular Economia
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service logos marquee -->
+  <div class="relative z-10 max-w-7xl mx-auto w-full mt-20 animate-slide delay-4">
+    <p style="font-family:'JetBrains Mono';font-size:11px;color:#4B5563;letter-spacing:2px;margin-bottom:16px;text-transform:uppercase;">Plataformas incluídas nos pacotes</p>
+    <div class="marquee-wrap">
+      <div class="marquee-track gap-4">
+        <!-- repeated twice for seamless loop -->
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎬 <span style="font-weight:600;">Netflix</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎵 <span style="font-weight:600;">Spotify</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">✨ <span style="font-weight:600;">Disney+</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎭 <span style="font-weight:600;">HBO Max</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">⚽ <span style="font-weight:600;">TNT Sports</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">📦 <span style="font-weight:600;">Amazon Prime</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">▶️ <span style="font-weight:600;">YouTube Premium</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎬 <span style="font-weight:600;">Netflix</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎵 <span style="font-weight:600;">Spotify</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">✨ <span style="font-weight:600;">Disney+</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">🎭 <span style="font-weight:600;">HBO Max</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">⚽ <span style="font-weight:600;">TNT Sports</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">📦 <span style="font-weight:600;">Amazon Prime</span></div>
+        <div class="service-pill glass mr-3" style="padding:10px 20px;">▶️ <span style="font-weight:600;">YouTube Premium</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ COMO FUNCIONA ═══════════════════════════ -->
+<section id="como-funciona" class="py-32 px-6 relative">
+  <hr class="hr-spark mb-24" />
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20 reveal">
+      <span class="section-label">◈ PROCESSO</span>
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,5vw,72px);letter-spacing:-0.5px;">
+        Como Funciona
+      </h2>
+      <p class="text-gray-400 mt-4 max-w-xl mx-auto">Três passos para centralizar toda a sua vida de entretenimento.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Step 1 -->
+      <div class="reveal glass rounded-2xl p-8 relative">
+        <div style="font-family:'Bebas Neue';font-size:72px;color:rgba(249,115,22,0.15);line-height:1;margin-bottom:16px;">01</div>
+        <div class="mb-4">
+          <span class="badge badge-orange">Escolha</span>
+        </div>
+        <h3 style="font-size:22px;font-weight:700;margin-bottom:12px;">Monte seu Combo</h3>
+        <p class="text-gray-400 leading-relaxed">Escolha entre os planos Básico, Premium ou Ultra — ou personalize com os serviços que realmente usa. Nosso algoritmo calcula a menor combinação possível.</p>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #21262d;">
+          <code style="font-family:'JetBrains Mono';font-size:11px;color:#34D399;">✓ Sem fidelidade · Cancel quando quiser</code>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="reveal glass rounded-2xl p-8 relative" style="transition-delay:0.15s;">
+        <div style="font-family:'Bebas Neue';font-size:72px;color:rgba(249,115,22,0.15);line-height:1;margin-bottom:16px;">02</div>
+        <div class="mb-4">
+          <span class="badge badge-ice">Pague</span>
+        </div>
+        <h3 style="font-size:22px;font-weight:700;margin-bottom:12px;">Uma Cobrança, Só</h3>
+        <p class="text-gray-400 leading-relaxed">Pague um único valor mensal via PIX, cartão ou boleto. Nossa plataforma de <strong style="color:#E5E7EB;">wallet digital</strong> gerencia automaticamente todas as renovações individuais nos dias certos.</p>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #21262d;">
+          <code style="font-family:'JetBrains Mono';font-size:11px;color:#38BDF8;">→ Modelo: Wallet Centralizada (Hipotético)</code>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="reveal glass rounded-2xl p-8 relative" style="transition-delay:0.3s;">
+        <div style="font-family:'Bebas Neue';font-size:72px;color:rgba(249,115,22,0.15);line-height:1;margin-bottom:16px;">03</div>
+        <div class="mb-4">
+          <span class="badge badge-mint">Aproveite</span>
+        </div>
+        <h3 style="font-size:22px;font-weight:700;margin-bottom:12px;">Dashboard Unificado</h3>
+        <p class="text-gray-400 leading-relaxed">Acesse o painel StreamUnity e gerencie todas as assinaturas em um só lugar. Veja datas de vencimento, uso por plataforma, histórico e receba alertas de renovação automática.</p>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #21262d;">
+          <code style="font-family:'JetBrains Mono';font-size:11px;color:#34D399;">✓ App iOS · Android · Web</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PLANOS ═══════════════════════════ -->
+<section id="planos" class="py-32 px-6 relative" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(249,115,22,0.05),transparent);">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-20 reveal">
+      <span class="section-label">◈ PLANOS FICTÍCIOS</span>
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,5vw,72px);letter-spacing:-0.5px;">
+        Escolha seu Plano
+      </h2>
+      <p class="text-gray-400 mt-4 max-w-xl mx-auto">Valores hipotéticos para fins de demonstração e estudo de mercado.</p>
+      <div class="glass-spark inline-flex items-center gap-2 px-4 py-2 rounded-full mt-4">
+        <span style="font-family:'JetBrains Mono';font-size:11px;color:#F97316;">⚠ PROTÓTIPO CONCEITUAL — Preços fictícios</span>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 plans-grid reveal">
+      <!-- BÁSICO -->
+      <div class="plan-card basic">
+        <div class="plan-inner">
+          <span class="badge badge-orange mb-4 inline-block">BÁSICO</span>
+          <h3 style="font-size:24px;font-weight:700;margin-bottom:4px;">Essencial</h3>
+          <p class="text-gray-400 text-sm mb-6">Para quem quer o melhor em vídeo e música</p>
+          <div class="plan-price shimmer-text">R$69</div>
+          <p class="text-gray-500 text-sm mb-8">/mês · cobrado mensalmente</p>
+          <div style="border-top:1px solid #21262d;padding-top:20px;margin-bottom:24px;">
+            <p style="font-size:11px;font-family:'JetBrains Mono';color:#6B7280;margin-bottom:12px;letter-spacing:1px;">INCLUI</p>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎬 Netflix (Padrão)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎵 Spotify (Individual)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>📦 Amazon Prime Video</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>Disney+</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>HBO Max</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>TNT Sports</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>YouTube Premium</span></div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#34D399;margin-bottom:16px;">Economia estimada: <strong>~R$42/mês</strong></p>
+          <button class="w-full py-3 rounded-xl border border-orange-500/30 text-orange-400 font-semibold text-sm hover:bg-orange-500/10 transition-all">Escolher Essencial</button>
+        </div>
+      </div>
+
+      <!-- PREMIUM (featured) -->
+      <div class="plan-card featured" style="transform:scale(1.03);">
+        <div class="plan-inner relative">
+          <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#F97316,#FBBF24);color:#030712;font-family:'Bebas Neue';font-size:13px;letter-spacing:2px;padding:4px 16px;border-radius:0 0 8px 8px;">MAIS POPULAR</div>
+          <span class="badge badge-orange mb-4 inline-block mt-6">PREMIUM</span>
+          <h3 style="font-size:24px;font-weight:700;margin-bottom:4px;">Total</h3>
+          <p class="text-gray-400 text-sm mb-6">O combo completo de streaming e música</p>
+          <div class="plan-price shimmer-text">R$109</div>
+          <p class="text-gray-500 text-sm mb-8">/mês · cobrado mensalmente</p>
+          <div style="border-top:1px solid #21262d;padding-top:20px;margin-bottom:24px;">
+            <p style="font-size:11px;font-family:'JetBrains Mono';color:#6B7280;margin-bottom:12px;letter-spacing:1px;">INCLUI</p>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎬 Netflix (4K)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎵 Spotify (Duo)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>✨ Disney+ (4K)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎭 HBO Max</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>📦 Amazon Prime Video</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>TNT Sports</span></div>
+              <div class="flex items-center gap-3 text-sm text-gray-600"><span>✗</span> <span>YouTube Premium</span></div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#34D399;margin-bottom:16px;">Economia estimada: <strong>~R$85/mês</strong></p>
+          <button class="btn-primary w-full py-3 rounded-xl text-sm">Escolher Total →</button>
+        </div>
+      </div>
+
+      <!-- ULTRA -->
+      <div class="plan-card ultra">
+        <div class="plan-inner">
+          <span class="badge badge-ice mb-4 inline-block">ULTRA</span>
+          <h3 style="font-size:24px;font-weight:700;margin-bottom:4px;">Máximo</h3>
+          <p class="text-gray-400 text-sm mb-6">Tudo incluído. Para a família que ama entretenimento</p>
+          <div class="plan-price" style="font-family:'Bebas Neue';font-size:64px;line-height:1;color:#38BDF8;">R$149</div>
+          <p class="text-gray-500 text-sm mb-8">/mês · cobrado mensalmente</p>
+          <div style="border-top:1px solid #21262d;padding-top:20px;margin-bottom:24px;">
+            <p style="font-size:11px;font-family:'JetBrains Mono';color:#6B7280;margin-bottom:12px;letter-spacing:1px;">INCLUI TUDO</p>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎬 Netflix (4K Família)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎵 Spotify (Família)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>✨ Disney+ (4K)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>🎭 HBO Max (Ultimate)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>⚽ TNT Sports</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>📦 Amazon Prime (inclui frete)</span></div>
+              <div class="flex items-center gap-3 text-sm"><span style="color:#34D399;">✓</span> <span>▶️ YouTube Premium (Família)</span></div>
+            </div>
+          </div>
+          <p style="font-size:12px;color:#34D399;margin-bottom:16px;">Economia estimada: <strong>~R$127/mês</strong></p>
+          <button class="w-full py-3 rounded-xl border border-sky-400/30 text-sky-400 font-semibold text-sm hover:bg-sky-400/10 transition-all">Escolher Máximo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="mt-20 reveal">
+      <h3 style="font-family:'Bebas Neue';font-size:36px;margin-bottom:20px;text-align:center;">Tabela Comparativa de Preços</h3>
+      <div class="glass rounded-2xl overflow-hidden">
+        <table class="compare-table">
+          <thead>
+            <tr style="background:rgba(33,38,45,0.5);">
+              <th class="text-left text-gray-400" style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;padding:20px;">SERVIÇO</th>
+              <th style="color:#F97316;">AVULSO (est.)</th>
+              <th style="color:#F97316;">BÁSICO</th>
+              <th style="color:#F97316;">PREMIUM</th>
+              <th style="color:#38BDF8;">ULTRA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="margin-right:8px;">🎬</span><strong>Netflix</strong></td>
+              <td class="text-center text-gray-400">R$29,90</td>
+              <td class="text-center"><span style="color:#34D399;">✓ Padrão</span></td>
+              <td class="text-center"><span style="color:#34D399;">✓ 4K</span></td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ 4K Fam.</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">🎵</span><strong>Spotify</strong></td>
+              <td class="text-center text-gray-400">R$21,90</td>
+              <td class="text-center"><span style="color:#34D399;">✓ Individual</span></td>
+              <td class="text-center"><span style="color:#34D399;">✓ Duo</span></td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ Família</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">✨</span><strong>Disney+</strong></td>
+              <td class="text-center text-gray-400">R$27,90</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center"><span style="color:#34D399;">✓ 4K</span></td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ 4K</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">🎭</span><strong>HBO Max</strong></td>
+              <td class="text-center text-gray-400">R$34,90</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center"><span style="color:#34D399;">✓ Std</span></td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ Ultimate</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">⚽</span><strong>TNT Sports</strong></td>
+              <td class="text-center text-gray-400">R$29,90</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ Incluso</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">📦</span><strong>Amazon Prime</strong></td>
+              <td class="text-center text-gray-400">R$19,90</td>
+              <td class="text-center"><span style="color:#34D399;">✓ Vídeo</span></td>
+              <td class="text-center"><span style="color:#34D399;">✓ Vídeo</span></td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ Completo</span></td>
+            </tr>
+            <tr>
+              <td><span style="margin-right:8px;">▶️</span><strong>YouTube Premium</strong></td>
+              <td class="text-center text-gray-400">R$20,90</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center"><span style="color:#38BDF8;">✓ Família</span></td>
+            </tr>
+            <tr style="background:rgba(249,115,22,0.05);">
+              <td style="font-weight:700;">Total Avulso</td>
+              <td class="text-center" style="font-weight:700;color:#F43F5E;">R$185,30</td>
+              <td class="text-center" style="font-weight:700;color:#F97316;">R$69</td>
+              <td class="text-center" style="font-weight:700;color:#F97316;">R$109</td>
+              <td class="text-center" style="font-weight:700;color:#38BDF8;">R$149</td>
+            </tr>
+            <tr style="background:rgba(52,211,153,0.05);">
+              <td style="font-weight:700;color:#34D399;">Você Economiza</td>
+              <td class="text-center text-gray-600">—</td>
+              <td class="text-center" style="font-weight:700;color:#34D399;">~R$42/mês</td>
+              <td class="text-center" style="font-weight:700;color:#34D399;">~R$85/mês</td>
+              <td class="text-center" style="font-weight:700;color:#34D399;">~R$127/mês</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center text-gray-600 text-xs mt-4" style="font-family:'JetBrains Mono';">* Preços avulsos são estimativas fictícias para fins de demonstração do conceito.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CALCULADORA ═══════════════════════════ -->
+<section id="calculadora" class="py-32 px-6">
+  <hr class="hr-spark mb-24" />
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label">◈ INTERATIVO</span>
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,5vw,72px);">Calcule sua Economia</h2>
+      <p class="text-gray-400 mt-4">Selecione os serviços que você usa e veja quanto economizaria.</p>
+    </div>
+
+    <div class="glass rounded-2xl p-8 reveal">
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Checklist -->
+        <div>
+          <p class="font-semibold mb-4" style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:2px;color:#6B7280;">SELECIONE OS SERVIÇOS QUE USA:</p>
+          <div class="space-y-2">
+            <div class="service-check active" data-price="29.90" data-name="Netflix" onclick="toggleService(this)">
+              <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <span style="font-size:18px;">🎬</span>
+              <div class="flex-1">
+                <span class="font-semibold">Netflix</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$29,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check active" data-price="21.90" data-name="Spotify" onclick="toggleService(this)">
+              <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <span style="font-size:18px;">🎵</span>
+              <div class="flex-1">
+                <span class="font-semibold">Spotify</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$21,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check" data-price="27.90" data-name="Disney+" onclick="toggleService(this)">
+              <div class="check-box"></div>
+              <span style="font-size:18px;">✨</span>
+              <div class="flex-1">
+                <span class="font-semibold">Disney+</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$27,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check" data-price="34.90" data-name="HBO Max" onclick="toggleService(this)">
+              <div class="check-box"></div>
+              <span style="font-size:18px;">🎭</span>
+              <div class="flex-1">
+                <span class="font-semibold">HBO Max</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$34,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check" data-price="29.90" data-name="TNT Sports" onclick="toggleService(this)">
+              <div class="check-box"></div>
+              <span style="font-size:18px;">⚽</span>
+              <div class="flex-1">
+                <span class="font-semibold">TNT Sports</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$29,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check active" data-price="19.90" data-name="Amazon Prime" onclick="toggleService(this)">
+              <div class="check-box"><svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <span style="font-size:18px;">📦</span>
+              <div class="flex-1">
+                <span class="font-semibold">Amazon Prime</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$19,90/mês</div>
+              </div>
+            </div>
+            <div class="service-check" data-price="20.90" data-name="YouTube Premium" onclick="toggleService(this)">
+              <div class="check-box"></div>
+              <span style="font-size:18px;">▶️</span>
+              <div class="flex-1">
+                <span class="font-semibold">YouTube Premium</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;">R$20,90/mês</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result panel -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <p class="font-semibold mb-6" style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:2px;color:#6B7280;">SUA ANÁLISE:</p>
+            <div class="total-bar mb-4">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-400 text-sm">Gasto avulso atual</span>
+                <span id="calc-total" style="font-family:'Bebas Neue';font-size:28px;color:#F43F5E;">R$71,70</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-400 text-sm">Plano recomendado</span>
+                <span id="calc-plan-name" style="font-family:'JetBrains Mono';font-size:13px;color:#F97316;font-weight:700;">Básico</span>
+              </div>
+              <div style="height:1px;background:rgba(249,115,22,0.2);margin:12px 0;"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-300 font-semibold">Economia mensal</span>
+                <span id="calc-saving" style="font-family:'Bebas Neue';font-size:36px;color:#34D399;">R$2,70</span>
+              </div>
+            </div>
+            <div id="calc-annual" class="glass rounded-xl p-4 text-center mb-6">
+              <span style="font-size:13px;color:#6B7280;">Economia anual estimada: </span>
+              <span id="calc-annual-val" style="font-family:'Bebas Neue';font-size:24px;color:#34D399;">R$32,40</span>
+            </div>
+
+            <!-- Selected list -->
+            <div id="selected-list" class="space-y-2">
+              <p style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;letter-spacing:1px;margin-bottom:8px;">SELECIONADOS:</p>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <div id="plan-recommendation" class="glass-spark rounded-xl p-4 mb-4 text-sm text-gray-300">
+              💡 <strong style="color:#F97316;">Plano Básico recomendado</strong> — cobre todos os serviços que você usa com a melhor relação custo-benefício.
+            </div>
+            <button class="btn-primary w-full py-3 text-sm">Ver detalhes do plano recomendado →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ IA ADVISOR ═══════════════════════════ -->
+<section id="ia-advisor" class="py-32 px-6">
+  <hr class="hr-spark mb-24" />
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label" style="color:#38BDF8;">◈ POWERED BY CLAUDE</span>
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,5vw,72px);">
+        <span style="color:#38BDF8;">IA</span> Advisor
+      </h2>
+      <p class="text-gray-400 mt-4">Descreva seus hábitos de consumo e nossa IA recomenda o melhor plano para você.</p>
+    </div>
+
+    <div class="ai-panel reveal">
+      <div class="flex items-center gap-3 mb-6">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,rgba(56,189,248,0.2),rgba(99,102,241,0.2));border:1px solid rgba(56,189,248,0.3);display:flex;align-items:center;justify-content:center;font-size:18px;">🤖</div>
+        <div>
+          <p style="font-weight:600;font-size:15px;">StreamUnity AI</p>
+          <p style="font-size:12px;color:#6B7280;font-family:'JetBrains Mono';">Powered by Claude · claude-sonnet-4-20250514</p>
+        </div>
+        <span class="badge badge-ice ml-auto">Beta</span>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px;color:#9CA3AF;margin-bottom:8px;display:block;font-family:'JetBrains Mono';letter-spacing:1px;">CONTE SOBRE SEU USO:</label>
+        <textarea
+          id="ai-query"
+          class="ai-input"
+          style="resize:none;height:100px;"
+          placeholder="Ex: Assisto muitas séries, tenho filhos pequenos, gosto de futebol e ouço música o dia todo no trabalho..."
+        ></textarea>
+      </div>
+
+      <div class="flex gap-3 mb-6 flex-wrap">
+        <button class="btn-ice text-xs" onclick="setPromptExample(0)">🎬 Cinéfilo</button>
+        <button class="btn-ice text-xs" onclick="setPromptExample(1)">⚽ Fã de esportes</button>
+        <button class="btn-ice text-xs" onclick="setPromptExample(2)">👨‍👩‍👧 Família com filhos</button>
+        <button class="btn-ice text-xs" onclick="setPromptExample(3)">🎵 Amante de música</button>
+      </div>
+
+      <button id="ai-btn" class="btn-primary w-full py-3 mb-6" onclick="askAI()">
+        Analisar meu perfil com IA →
+      </button>
+
+      <!-- Loading state -->
+      <div id="ai-loading" style="display:none;text-align:center;padding:20px;">
+        <div style="display:flex;justify-content:center;align-items:center;gap:4px;margin-bottom:12px;">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+        <p style="font-size:13px;color:#6B7280;font-family:'JetBrains Mono';">Analisando seu perfil...</p>
+      </div>
+
+      <!-- AI Response -->
+      <div id="ai-response" class="ai-response">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <span style="font-size:16px;">🤖</span>
+          <span style="font-family:'JetBrains Mono';font-size:11px;color:#38BDF8;letter-spacing:1px;">RECOMENDAÇÃO PERSONALIZADA</span>
+        </div>
+        <div id="ai-response-text" style="line-height:1.8;"></div>
+      </div>
+
+      <div id="ai-error" style="display:none;" class="glass-spark rounded-xl p-4 text-sm" style="color:#F43F5E;">
+        ⚠️ Erro ao conectar à API. Verifique sua chave de API nas configurações.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ VIABILIDADE LEGAL ═══════════════════════════ -->
+<section id="viabilidade" class="py-32 px-6" style="background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(244,63,94,0.04),transparent);">
+  <hr class="hr-spark mb-24" />
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="section-label" style="color:#F43F5E;">◈ ANÁLISE CRÍTICA</span>
+      <h2 style="font-family:'Bebas Neue';font-size:clamp(40px,5vw,72px);">
+        Viabilidade Legal<br/><span style="color:#F43F5E;">e Técnica</span>
+      </h2>
+      <div class="glass-spark inline-flex items-center gap-2 px-4 py-2 rounded-full mt-4">
+        <span style="font-family:'JetBrains Mono';font-size:11px;color:#F43F5E;">Esta seção é real. Os desafios abaixo existem.</span>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+
+      <!-- Block 1: Licenciamento -->
+      <div class="glass rounded-2xl p-8 reveal">
+        <div class="flex items-start gap-4">
+          <span style="font-size:32px;flex-shrink:0;">⚖️</span>
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <h3 style="font-size:20px;font-weight:700;">Contratos de Licenciamento Direto</h3>
+              <span class="badge badge-red">Crítico</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed mb-4">
+              O maior obstáculo operacional é que <strong style="color:#E5E7EB;">plataformas como Netflix, Spotify e Disney+ não permitem revenda direta de suas assinaturas</strong> por terceiros, salvo mediante contratos B2B específicos de distribuição — similares aos acordos que o <strong style="color:#F97316;">Mercado Livre</strong> estabeleceu para o Meli+.
+            </p>
+            <p class="text-gray-400 leading-relaxed">
+              O modelo viável seria atuar como <strong style="color:#E5E7EB;">agregador autorizado (MVNO de streaming)</strong>, exigindo negociação caso a caso com cada detentor de direitos, com compartilhamento de receita e compliance contratual complexo. Empresas como Claro, Tim e Oi conseguem isso pela escala da base de usuários e pelo poder de negociação.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 2: Modelo Wallet -->
+      <div class="glass rounded-2xl p-8 reveal">
+        <div class="flex items-start gap-4">
+          <span style="font-size:32px;flex-shrink:0;">💳</span>
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <h3 style="font-size:20px;font-weight:700;">Modelo de Wallet Centralizada</h3>
+              <span class="badge badge-orange">Técnico</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed mb-4">
+              A alternativa técnica hipotética seria um <strong style="color:#E5E7EB;">modelo de carteira digital</strong>: o usuário deposita o valor mensal e a plataforma, via APIs de pagamento (Stripe Connect, Adyen ou APIs PIX do Banco Central), distribui os pagamentos individuais a cada serviço nos respectivos dias de vencimento.
+            </p>
+            <div class="glass rounded-xl p-4" style="border:1px solid rgba(249,115,22,0.15);">
+              <p style="font-family:'JetBrains Mono';font-size:12px;color:#F97316;margin-bottom:8px;letter-spacing:1px;">FLUXO TÉCNICO HIPOTÉTICO:</p>
+              <div class="space-y-2">
+                <div style="font-size:13px;color:#9CA3AF;">1. Usuário paga R$109 via PIX → Wallet StreamUnity (conta de pagamento)</div>
+                <div style="font-size:13px;color:#9CA3AF;">2. Sistema de scheduler (cron) mapeia vencimentos individuais</div>
+                <div style="font-size:13px;color:#9CA3AF;">3. API de pagamento dispara cobranças nas datas certas</div>
+                <div style="font-size:13px;color:#9CA3AF;">4. Relatório consolidado no dashboard do usuário</div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm mt-3">
+              ⚠️ Esta abordagem exigiria licença de <strong style="color:#E5E7EB;">Instituição de Pagamento (IP)</strong> pelo Banco Central do Brasil (Resolução BCB nº 150/2021) e, ainda assim, não resolve o problema do licenciamento de conteúdo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 3: Lei 14.063/2020 -->
+      <div class="glass rounded-2xl p-8 reveal">
+        <div class="flex items-start gap-4">
+          <span style="font-size:32px;flex-shrink:0;">🔏</span>
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <h3 style="font-size:20px;font-weight:700;">Lei 14.063/2020 — Assinaturas Digitais</h3>
+              <span class="badge badge-ice">Regulatório</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed mb-4">
+              A Lei 14.063/2020 regulamenta o uso de assinaturas eletrônicas em interações com o poder público, mas serve de referência jurídica para o setor privado. Para contratos de adesão de uma plataforma como StreamUnity, ela implica:
+            </p>
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <span style="color:#38BDF8;flex-shrink:0;">→</span>
+                <p class="text-sm text-gray-400"><strong style="color:#E5E7EB;">Assinatura Simples:</strong> suficiente para termos de uso e contratos de adesão online (e-mail, click-to-accept). Válida juridicamente conforme STJ (REsp 1.495.920).</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <span style="color:#38BDF8;flex-shrink:0;">→</span>
+                <p class="text-sm text-gray-400"><strong style="color:#E5E7EB;">Assinatura Avançada:</strong> recomendada para contratos B2B com as plataformas parceiras, usando biometria ou tokens.</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <span style="color:#38BDF8;flex-shrink:0;">→</span>
+                <p class="text-sm text-gray-400"><strong style="color:#E5E7EB;">LGPD (Lei 13.709/18):</strong> obriga o tratamento adequado dos dados de consumo e pagamento dos usuários, com DPO nomeado e política de privacidade clara.</p>
+              </div>
+              <div class="flex items-start gap-3">
+                <span style="color:#38BDF8;flex-shrink:0;">→</span>
+                <p class="text-sm text-gray-400"><strong style="color:#E5E7EB;">CDC (Lei 8.078/90):</strong> o cancelamento deve ser facilitado (art. 49), e cobranças indevidas geram responsabilidade dobrada.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 4: LGPD & Conclusão -->
+      <div class="glass rounded-2xl p-8 reveal" style="border:1px solid rgba(249,115,22,0.2);">
+        <div class="flex items-start gap-4">
+          <span style="font-size:32px;flex-shrink:0;">🗺️</span>
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <h3 style="font-size:20px;font-weight:700;">Caminho Viável: O Modelo Meli+</h3>
+              <span class="badge badge-mint">Referência</span>
+            </div>
+            <p class="text-gray-400 leading-relaxed">
+              O caso do <strong style="color:#F97316;">Meli+ do Mercado Livre</strong> é o modelo mais próximo do que StreamUnity propõe. O ML negociou acordos de distribuição individual com Netflix, Disney+ e Apple TV+, subsidiando parte do custo como benefício de fidelidade da sua base de +50M de usuários. Para uma startup, o caminho seria:
+            </p>
+            <div class="grid grid-cols-2 gap-3 mt-4">
+              <div class="glass rounded-xl p-4 text-center">
+                <div style="font-family:'Bebas Neue';font-size:24px;color:#34D399;">01</div>
+                <p class="text-xs text-gray-400 mt-1">MVP com serviços sem DRM restritivo (ex: Deezer, Crunchyroll)</p>
+              </div>
+              <div class="glass rounded-xl p-4 text-center">
+                <div style="font-family:'Bebas Neue';font-size:24px;color:#F97316;">02</div>
+                <p class="text-xs text-gray-400 mt-1">Escalar base de usuários para ter poder de negociação B2B</p>
+              </div>
+              <div class="glass rounded-xl p-4 text-center">
+                <div style="font-family:'Bebas Neue';font-size:24px;color:#38BDF8;">03</div>
+                <p class="text-xs text-gray-400 mt-1">Licença de IP no Banco Central para operar wallet</p>
+              </div>
+              <div class="glass rounded-xl p-4 text-center">
+                <div style="font-family:'Bebas Neue';font-size:24px;color:#FBBF24;">04</div>
+                <p class="text-xs text-gray-400 mt-1">Contratos de distribuição com os grandes players</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CTA FINAL ═══════════════════════════ -->
+<section class="py-32 px-6 relative overflow-hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(249,115,22,0.1),transparent);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="max-w-3xl mx-auto text-center relative z-10 reveal">
+    <h2 style="font-family:'Bebas Neue';font-size:clamp(48px,7vw,100px);line-height:0.9;margin-bottom:24px;">
+      Entre na<br/><span class="shimmer-text">Lista de Espera</span>
+    </h2>
+    <p class="text-gray-400 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
+      StreamUnity está em desenvolvimento. Seja o primeiro a saber quando lançarmos — e garanta 3 meses com 50% off.
+    </p>
+    <div class="flex gap-3 max-w-md mx-auto">
+      <input type="email" placeholder="seu@email.com" class="ai-input flex-1" style="border-radius:12px;" />
+      <button class="btn-primary whitespace-nowrap">Entrar na lista →</button>
+    </div>
+    <p style="font-size:12px;color:#4B5563;margin-top:12px;font-family:'JetBrains Mono';">✓ Sem spam · Cancel quando quiser · LGPD compliant</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer style="border-top:1px solid #21262d;padding:40px 24px;">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div class="logo-mark">
+        <div class="logo-icon">S</div>
+        <span style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;">StreamUnity</span>
+      </div>
+      <div class="flex flex-wrap gap-6">
+        <a href="#" class="footer-link">Termos de Uso</a>
+        <a href="#" class="footer-link">Privacidade (LGPD)</a>
+        <a href="#" class="footer-link">Cancelamento Fácil</a>
+        <a href="#" class="footer-link">API Docs</a>
+      </div>
+      <p style="font-size:12px;color:#374151;font-family:'JetBrains Mono';">
+        © 2026 StreamUnity · Protótipo Conceitual · Não é um serviço real
+      </p>
+    </div>
+    <div class="mt-6" style="border-top:1px solid #161b22;padding-top:20px;">
+      <p style="font-size:11px;color:#374151;font-family:'JetBrains Mono';line-height:1.8;">
+        ⚠️ DISCLAIMER: StreamUnity é um projeto de demonstração conceitual e estudo de mercado. Não possui contratos com Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime Video ou YouTube Premium. Os preços apresentados são fictícios. Construído com ♥ usando Claude AI · Arquitetura por Claude Sonnet 4
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ SCRIPTS ═══════════════════════════ -->
+<script>
+// ── SERVICES DATA ─────────────────────────────────────────
+const PLANS = {
+  basic:   { price: 69,  name: 'Básico',  services: ['Netflix','Spotify','Amazon Prime'] },
+  premium: { price: 109, name: 'Premium', services: ['Netflix','Spotify','Disney+','HBO Max','Amazon Prime'] },
+  ultra:   { price: 149, name: 'Ultra',   services: ['Netflix','Spotify','Disney+','HBO Max','TNT Sports','Amazon Prime','YouTube Premium'] },
+};
+
+const PROMPT_EXAMPLES = [
+  "Assisto muitas séries e filmes durante a semana. Sou fã de cinema internacional, documentários e thrillers. Não ligo muito para esportes e não ouço muita música via streaming.",
+  "Sou apaixonado por futebol, acompanho campeonatos brasileiros e europeus. Também gosto de séries de ação. Tenho família com crianças pequenas que adoram animações.",
+  "Temos uma família com dois filhos de 5 e 8 anos. As crianças adoram Disney, nós adultos assistimos séries. Também ouvimos muito Spotify — músicas o dia todo.",
+  "Trabalho home office e ouço música o dia inteiro no Spotify. À noite gosto de séries no Netflix. Não assisto esportes e não tenho filhos.",
+];
+
+// ── SCROLL REVEAL ──────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── NAV SCROLL ─────────────────────────────────────────────
+function scrollToSection(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior:'smooth' });
+}
+
+// ── CALCULATOR ─────────────────────────────────────────────
+function toggleService(el) {
+  el.classList.toggle('active');
+  const box = el.querySelector('.check-box');
+  if(el.classList.contains('active')) {
+    box.innerHTML = '<svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>';
+  } else {
+    box.innerHTML = '';
+  }
+  updateCalculator();
+}
+
+function updateCalculator() {
+  const selected = document.querySelectorAll('.service-check.active');
+  let total = 0;
+  const names = [];
+  selected.forEach(el => {
+    total += parseFloat(el.dataset.price);
+    names.push(el.dataset.name);
+  });
+
+  // Recommend plan
+  let recommended = null;
+  let planPrice = 0;
+  let planName = 'Personalizado';
+
+  for(const [key, plan] of Object.entries(PLANS)) {
+    const covers = names.every(n => plan.services.includes(n));
+    if(covers) {
+      if(!recommended || plan.price < planPrice) {
+        recommended = key;
+        planPrice = plan.price;
+        planName = plan.name;
+      }
+    }
+  }
+
+  if(!recommended) {
+    const needed = names.length;
+    if(needed === 0) { planPrice = 0; planName = '—'; }
+    else if(needed <= 3) { planPrice = 69; planName = 'Básico'; }
+    else if(needed <= 5) { planPrice = 109; planName = 'Premium'; }
+    else { planPrice = 149; planName = 'Ultra'; }
+  }
+
+  const saving = Math.max(0, total - planPrice);
+  const annual = saving * 12;
+
+  // Update UI
+  document.getElementById('calc-total').textContent = `R$${total.toFixed(2).replace('.',',')}`;
+  document.getElementById('calc-plan-name').textContent = planName;
+  document.getElementById('calc-saving').textContent = `R$${saving.toFixed(2).replace('.',',')}`;
+  document.getElementById('calc-annual-val').textContent = `R$${annual.toFixed(2).replace('.',',')}`;
+
+  // Saving color
+  const savingEl = document.getElementById('calc-saving');
+  savingEl.style.color = saving > 0 ? '#34D399' : saving === 0 ? '#F97316' : '#F43F5E';
+
+  // Recommendation text
+  const recEl = document.getElementById('plan-recommendation');
+  if(names.length === 0) {
+    recEl.innerHTML = '💡 Selecione os serviços que você usa para ver a recomendação.';
+  } else if(saving > 0) {
+    recEl.innerHTML = `💡 <strong style="color:#F97316;">Plano ${planName} recomendado</strong> — economize R$${saving.toFixed(2).replace('.',',')} por mês comparado ao avulso.`;
+  } else if(saving === 0) {
+    recEl.innerHTML = `✓ <strong style="color:#34D399;">Plano ${planName} perfeito</strong> — mesmo preço que avulso, mas com mais facilidade de gestão.`;
+  } else {
+    recEl.innerHTML = `⚠️ <strong style="color:#F43F5E;">Poucos serviços selecionados</strong> — manter avulso pode ser mais econômico.`;
+  }
+
+  // Selected list
+  const listEl = document.getElementById('selected-list');
+  const serviceItems = names.map(n => `<div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#9CA3AF;"><span style="color:#34D399;">✓</span>${n}</div>`).join('');
+  listEl.innerHTML = `<p style="font-family:'JetBrains Mono';font-size:11px;color:#6B7280;letter-spacing:1px;margin-bottom:8px;">SELECIONADOS:</p>${serviceItems || '<p style="font-size:13px;color:#6B7280;">Nenhum serviço selecionado</p>'}`;
+}
+
+// Run once on load
+updateCalculator();
+
+// ── AI ADVISOR ─────────────────────────────────────────────
+function setPromptExample(idx) {
+  document.getElementById('ai-query').value = PROMPT_EXAMPLES[idx];
+}
+
+async function askAI() {
+  const query = document.getElementById('ai-query').value.trim();
+  if(!query) {
+    document.getElementById('ai-query').focus();
+    return;
+  }
+
+  const btn = document.getElementById('ai-btn');
+  const loading = document.getElementById('ai-loading');
+  const responseEl = document.getElementById('ai-response');
+  const errorEl = document.getElementById('ai-error');
+
+  btn.disabled = true;
+  btn.textContent = 'Analisando...';
+  loading.style.display = 'block';
+  responseEl.classList.remove('visible');
+  errorEl.style.display = 'none';
+
+  const systemPrompt = `Você é o assistente IA do StreamUnity, uma plataforma fictícia que agrega assinaturas de streaming.
+
+Você conhece estes planos (preços fictícios de demonstração):
+- Plano Básico (R$69/mês): Netflix Padrão, Spotify Individual, Amazon Prime Video
+- Plano Premium (R$109/mês): Netflix 4K, Spotify Duo, Disney+ 4K, HBO Max, Amazon Prime Video  
+- Plano Ultra (R$149/mês): Netflix 4K Família, Spotify Família, Disney+ 4K, HBO Max Ultimate, TNT Sports, Amazon Prime completo, YouTube Premium Família
+
+Você também sabe que os preços avulsos somam até R$185/mês se todos forem contratados separadamente.
+
+INSTRUÇÕES:
+- Analise o perfil do usuário
+- Recomende o plano mais adequado com justificativa clara
+- Mencione a economia mensal estimada
+- Use linguagem direta, amigável e profissional
+- Máximo 200 palavras
+- Use emojis moderadamente
+- Seja específico sobre quais serviços do plano atendem as necessidades citadas
+- Inclua um lembrete de que é um protótipo conceitual no final em itálico`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: query }]
+      })
+    });
+
+    if(!response.ok) throw new Error(`API Error: ${response.status}`);
+    const data = await response.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Sem resposta.';
+
+    document.getElementById('ai-response-text').innerHTML = text.replace(/\n/g, '<br/>').replace(/\*\*(.*?)\*\*/g, '<strong style="color:#E5E7EB;">$1</strong>').replace(/\*(.*?)\*/g, '<em style="color:#6B7280;">$1</em>');
+    responseEl.classList.add('visible');
+
+  } catch(err) {
+    errorEl.style.display = 'block';
+    errorEl.innerHTML = `⚠️ <strong>Erro de API:</strong> ${err.message}. Para testar, insira uma chave válida da API Anthropic.`;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Analisar meu perfil com IA →';
+    loading.style.display = 'none';
+  }
+}
+
+// Allow Enter key in textarea with Ctrl+Enter
+document.getElementById('ai-query')?.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter' && e.ctrlKey) askAI();
+});
+</script>
+</body>
+</html>
