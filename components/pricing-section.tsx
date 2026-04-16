@@ -52,7 +52,7 @@ const plans = [
     ],
     badge: "MAIS POPULAR",
     badgeColor: "bg-primary/20 text-primary border-primary/40",
-    cardClass: "bg-gradient-to-br from-primary via-glow to-primary",
+    cardClass: "bg-gradient-to-br from-[#A855F7] via-[#6366F1] to-[#3B82F6]",
     featured: true,
   },
   {
@@ -89,7 +89,7 @@ export function PricingSection({
       className="py-32 px-6 relative"
       style={{
         background:
-          "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(249,115,22,0.05), transparent)",
+          "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(168,85,247,0.06), transparent)",
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -206,7 +206,7 @@ export function PricingSection({
                   className={cn(
                     "w-full py-4 rounded-xl font-bold text-sm transition-all",
                     plan.featured
-                      ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/30 hover:shadow-primary/50"
+                      ? "bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white shadow-lg shadow-[#A855F7]/30 hover:shadow-[#A855F7]/50"
                       : "bg-secondary text-foreground hover:bg-secondary/80"
                   )}
                 >

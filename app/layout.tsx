@@ -19,9 +19,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StreamUnity — Tudo que Voce Usa. Em Um So Lugar.",
+  title: "Streamix — TV, Musica e Entretenimento em Um So Lugar.",
   description:
-    "StreamUnity agrega Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime e YouTube Premium em um unico plano mensal. Economize ate R$127/mes.",
+    "Streamix agrega Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime e YouTube Premium em um unico plano mensal. Economize ate R$127/mes.",
   keywords: [
     "streaming",
     "netflix",
@@ -30,10 +30,11 @@ export const metadata: Metadata = {
     "hbo max",
     "assinatura",
     "economia",
+    "streamix",
   ],
-  authors: [{ name: "StreamUnity" }],
+  authors: [{ name: "Streamix" }],
   openGraph: {
-    title: "StreamUnity — Tudo que Voce Usa. Em Um So Lugar.",
+    title: "Streamix — TV, Musica e Entretenimento em Um So Lugar.",
     description:
       "Agregue todas as suas assinaturas de streaming em um unico plano mensal.",
     type: "website",
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#030712",
+  themeColor: "#060A14",
   width: "device-width",
   initialScale: 1,
 };

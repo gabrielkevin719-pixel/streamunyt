@@ -34,12 +34,20 @@ export function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-glow rounded-lg flex items-center justify-center shadow-lg shadow-primary/40">
-            <span className="font-display text-lg text-background">S</span>
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-gradient-to-br from-[#0D1425] to-[#0D1425] rounded-xl border border-[#1C2A44] flex items-center justify-center shadow-lg">
+            <svg width="20" height="22" viewBox="0 0 120 160" fill="none">
+              <path d="M 90,10 C 115,10 20,55 50,65 L 80,72 L 50,80 C 20,88 115,130 90,140" stroke="url(#navGrad)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <defs>
+                <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#A855F7"/>
+                  <stop offset="100%" stopColor="#3B82F6"/>
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
-          <span className="font-display text-xl tracking-wider">
-            StreamUnity
+          <span className="font-display text-xl tracking-wider italic">
+            STREAM<span className="bg-gradient-to-r from-[#A855F7] to-[#6366F1] bg-clip-text text-transparent">IX</span>
           </span>
         </Link>
 
@@ -58,7 +66,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center">
           <Link
             href="#planos"
-            className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-2 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all"
+            className="bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white font-bold text-sm px-5 py-2 rounded-xl shadow-lg shadow-[#A855F7]/30 hover:shadow-[#A855F7]/50 hover:-translate-y-0.5 transition-all"
           >
             Inscrever-se
           </Link>
@@ -88,7 +96,7 @@ export function Navbar() {
             <div className="pt-4 border-t border-border">
               <Link
                 href="#planos"
-                className="block text-center bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-3 rounded-xl"
+                className="block text-center bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white font-bold text-sm px-5 py-3 rounded-xl"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Ver Planos e Preco

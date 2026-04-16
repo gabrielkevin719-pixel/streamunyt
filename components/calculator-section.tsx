@@ -31,16 +31,16 @@ export function CalculatorSection() {
     .filter((s) => selected.includes(s.id))
     .reduce((acc, s) => acc + s.price, 0);
 
-  // StreamUnity pricing logic
-  const getStreamUnityPrice = () => {
+  // Streamix pricing logic
+  const getStreamixPrice = () => {
     const count = selected.length;
     if (count <= 3) return 50;
     if (count <= 5) return 79.9;
     return 129.9;
   };
 
-  const streamUnityPrice = getStreamUnityPrice();
-  const savings = totalIndividual - streamUnityPrice;
+  const streamixPrice = getStreamixPrice();
+  const savings = totalIndividual - streamixPrice;
 
   return (
     <section id="calculadora" className="py-32 px-6 relative">
@@ -147,7 +147,7 @@ export function CalculatorSection() {
           )}
 
           {/* Total bar */}
-          <div className="bg-gradient-to-r from-primary/15 to-glow/5 border border-primary/30 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-[#A855F7]/15 to-[#3B82F6]/5 border border-[#A855F7]/30 rounded-2xl p-6">
             <div className="grid md:grid-cols-3 gap-6 text-center">
               <div>
                 <p className="font-mono text-xs text-muted-foreground mb-2 tracking-wider">
@@ -159,10 +159,10 @@ export function CalculatorSection() {
               </div>
               <div>
                 <p className="font-mono text-xs text-muted-foreground mb-2 tracking-wider">
-                  PAGA COM STREAMUNITY
+                  PAGA COM STREAMIX
                 </p>
                 <p className="font-display text-3xl text-primary">
-                  R${streamUnityPrice.toFixed(2).replace(".", ",")}
+                  R${streamixPrice.toFixed(2).replace(".", ",")}
                 </p>
               </div>
               <div>

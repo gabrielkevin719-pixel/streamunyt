@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 
 const faqs = [
   {
-    question: "Como funciona o StreamUnity?",
+    question: "Como funciona o Streamix?",
     answer:
-      "O StreamUnity agrega multiplas assinaturas de streaming em um unico plano. Voce paga uma vez por mes e nos gerenciamos todas as suas assinaturas individuais, economizando tempo e dinheiro.",
+      "O Streamix agrega multiplas assinaturas de streaming em um unico plano. Voce paga uma vez por mes e nos gerenciamos todas as suas assinaturas individuais, economizando tempo e dinheiro.",
   },
   {
     question: "Quais servicos estao inclusos?",
@@ -18,7 +18,7 @@ const faqs = [
   {
     question: "Posso cancelar a qualquer momento?",
     answer:
-      "Sim! Nao ha fidelidade ou multa por cancelamento. Voce pode cancelar sua assinatura a qualquer momento diretamente pelo painel do StreamUnity.",
+      "Sim! Nao ha fidelidade ou multa por cancelamento. Voce pode cancelar sua assinatura a qualquer momento diretamente pelo painel do Streamix.",
   },
   {
     question: "Como e feito o pagamento?",

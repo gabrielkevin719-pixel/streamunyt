@@ -82,8 +82,8 @@ export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.08)_0%,transparent_70%)] -top-[200px] -left-[100px] pointer-events-none" />
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.05)_0%,transparent_70%)] bottom-0 right-0 pointer-events-none" />
+      <div className="absolute w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.08)_0%,transparent_70%)] -top-[200px] -left-[100px] pointer-events-none" />
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.06)_0%,transparent_70%)] bottom-0 right-0 pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -133,7 +133,7 @@ export function HeroSection() {
 
             {/* Subtext */}
             <p className="text-muted-foreground text-lg leading-relaxed max-w-xl mb-8">
-              StreamUnity agrega todos os seus servicos favoritos em um unico plano mensal. 
+              Streamix agrega todos os seus servicos favoritos em um unico plano mensal. 
               Economize ate <strong className="text-primary">R$127/mes</strong>.
             </p>
 
@@ -141,14 +141,14 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3 mb-12">
               <a
                 href="#planos"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold px-8 py-4 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#A855F7] to-[#6366F1] text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-[#A855F7]/30 hover:shadow-[#A855F7]/50 hover:-translate-y-0.5 transition-all"
               >
                 Ver Planos e Precos
                 <ArrowRight size={18} />
               </a>
               <a
                 href="#calculadora"
-                className="inline-flex items-center gap-2 bg-ice/10 border border-ice/40 text-ice font-semibold px-8 py-4 rounded-xl hover:bg-ice/20 transition-all"
+                className="inline-flex items-center gap-2 bg-[#3B82F6]/10 border border-[#3B82F6]/40 text-[#3B82F6] font-semibold px-8 py-4 rounded-xl hover:bg-[#3B82F6]/20 transition-all"
               >
                 <Calculator size={18} />
                 Calcular Economia
@@ -188,8 +188,16 @@ export function HeroSection() {
           >
             <div className="relative h-[320px] sm:h-[400px] md:h-[500px] flex items-center justify-center">
               {/* Central hub */}
-              <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-glow via-primary to-primary/80 flex items-center justify-center shadow-2xl shadow-primary/40 z-10">
-                <span className="font-display text-2xl sm:text-3xl md:text-4xl text-background">S</span>
+              <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl bg-[#0D1425] border border-[#1C2A44] flex items-center justify-center shadow-2xl shadow-[#A855F7]/20 z-10">
+                <svg className="w-8 h-10 sm:w-10 sm:h-12 md:w-12 md:h-14" viewBox="0 0 120 160" fill="none">
+                  <path d="M 90,10 C 115,10 20,55 50,65 L 80,72 L 50,80 C 20,88 115,130 90,140" stroke="url(#hubGrad)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <defs>
+                    <linearGradient id="hubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#A855F7"/>
+                      <stop offset="100%" stopColor="#3B82F6"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
 
               {/* Orbiting services with logos */}
