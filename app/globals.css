@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 3%;
+    --foreground: 220 13% 91%;
+    --card: 222 39% 6%;
+    --card-foreground: 220 13% 91%;
+    --popover: 222 47% 5%;
+    --popover-foreground: 220 13% 91%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 222 47% 3%;
+    --secondary: 222 39% 12%;
+    --secondary-foreground: 220 13% 91%;
+    --muted: 222 26% 15%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 197 89% 58%;
+    --accent-foreground: 222 47% 3%;
+    --destructive: 350 89% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 26% 16%;
+    --input: 222 26% 16%;
+    --ring: 24 95% 53%;
+    --radius: 0.75rem;
+    --spark: 24 95% 53%;
+    --glow: 27 97% 67%;
+    --ice: 197 89% 58%;
+    --mint: 160 64% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Noise texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+/* Shimmer text effect */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--spark)) 0%,
+    hsl(var(--glow)) 25%,
+    hsl(var(--spark)) 50%,
+    hsl(var(--glow)) 75%,
+    hsl(var(--spark)) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Glass card effect */
+.glass {
+  background: hsla(var(--card), 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid hsla(var(--border), 0.8);
+}
+
+.glass-spark {
+  background: hsla(var(--spark), 0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid hsla(var(--spark), 0.25);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted));
+}
