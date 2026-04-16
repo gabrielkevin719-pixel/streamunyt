@@ -24,7 +24,8 @@ const plans = [
     name: "Basico",
     subtitle: "Essencial",
     description: "Para quem quer o melhor em video e musica",
-    price: 69,
+    price: 50,
+    originalPrice: 71.7,
     services: [
       "Netflix (Padrao)",
       "Spotify Premium",
@@ -40,7 +41,8 @@ const plans = [
     name: "Premium",
     subtitle: "Total",
     description: "O pacote mais popular com tudo incluso",
-    price: 109,
+    price: 79.9,
+    originalPrice: 134.5,
     services: [
       "Netflix (Premium 4K)",
       "Spotify Premium",
@@ -58,7 +60,8 @@ const plans = [
     name: "Ultra",
     subtitle: "Maximo",
     description: "Para toda a familia com esportes ao vivo",
-    price: 149,
+    price: 129.9,
+    originalPrice: 185.3,
     services: [
       "Netflix (Premium 4K)",
       "Spotify Premium Familia",
@@ -136,19 +139,29 @@ export function PricingSection({
                 </p>
 
                 {/* Price */}
-                <div className="mb-2">
+                <div className="mb-1">
                   <span
                     className={cn(
-                      "font-display text-6xl leading-none",
+                      "font-display text-5xl md:text-6xl leading-none",
                       plan.featured ? "shimmer-text" : "text-foreground"
                     )}
                   >
-                    R${plan.price}
+                    R${plan.price.toFixed(2).replace(".", ",")}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-sm mb-8">
+                <p className="text-muted-foreground text-sm mb-2">
                   /mes - cobrado mensalmente
                 </p>
+                {plan.originalPrice && (
+                  <p className="text-sm mb-6">
+                    <span className="text-muted-foreground line-through mr-2">
+                      R${plan.originalPrice.toFixed(2).replace(".", ",")}
+                    </span>
+                    <span className="text-mint font-bold">
+                      Economia de R${(plan.originalPrice - plan.price).toFixed(2).replace(".", ",")}/mes
+                    </span>
+                  </p>
+                )}
 
                 {/* Service Logos Grid */}
                 <div className="flex flex-wrap gap-3 mb-6 pb-6 border-b border-border">

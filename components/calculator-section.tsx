@@ -34,9 +34,9 @@ export function CalculatorSection() {
   // StreamUnity pricing logic
   const getStreamUnityPrice = () => {
     const count = selected.length;
-    if (count <= 3) return 69;
-    if (count <= 5) return 109;
-    return 149;
+    if (count <= 3) return 50;
+    if (count <= 5) return 79.9;
+    return 129.9;
   };
 
   const streamUnityPrice = getStreamUnityPrice();
