@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const services = [
-  { id: "netflix", name: "Netflix", price: 29.9, logo: "/logos/netflix.png", darkLogo: false },
-  { id: "spotify", name: "Spotify", price: 21.9, logo: "/logos/spotify.png", darkLogo: false },
-  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.png", darkLogo: true },
-  { id: "hbomax", name: "HBO Max", price: 34.9, logo: "/logos/hbo-max.png", darkLogo: true },
-  { id: "tnt", name: "TNT Sports", price: 29.9, logo: "/logos/tnt-sports.png", darkLogo: false },
-  { id: "amazon", name: "Amazon Prime", price: 19.9, logo: "/logos/prime-video.png", darkLogo: false },
-  { id: "youtube", name: "YouTube Premium", price: 20.9, logo: "/logos/youtube.png", darkLogo: false },
+  { id: "netflix", name: "Netflix", price: 29.9, logo: "/logos/netflix.png" },
+  { id: "spotify", name: "Spotify", price: 21.9, logo: "/logos/spotify.png" },
+  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.png" },
+  { id: "hbomax", name: "HBO Max", price: 34.9, logo: "/logos/hbo-max.png" },
+  { id: "tnt", name: "TNT Sports", price: 29.9, logo: "/logos/tnt-sports.png" },
+  { id: "amazon", name: "Amazon Prime", price: 19.9, logo: "/logos/prime-video.png" },
+  { id: "youtube", name: "YouTube Premium", price: 20.9, logo: "/logos/youtube.png" },
 ];
 
 export function CalculatorSection() {
@@ -105,7 +105,7 @@ export function CalculatorSection() {
                     alt={service.name}
                     width={28}
                     height={28}
-                    className={`object-contain ${service.darkLogo ? "brightness-0 invert" : ""}`}
+                    className="object-contain"
                   />
                 </div>
 
@@ -139,7 +139,7 @@ export function CalculatorSection() {
                       alt={service.name}
                       width={24}
                       height={24}
-                      className={`object-contain ${service.darkLogo ? "brightness-0 invert" : ""}`}
+                      className="object-contain"
                     />
                   </div>
                 ))}

@@ -4,13 +4,6 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-// Services with dark logos that need inversion on dark backgrounds
-const darkLogoServices = new Set([
-  "Disney+ (Padrao)",
-  "Disney+ (Premium)",
-  "HBO Max (Padrao)",
-]);
-
 // Logo mapping for streaming services
 const serviceLogos: Record<string, string> = {
   "Netflix (Padrao)": "/logos/netflix.png",
@@ -170,7 +163,7 @@ export function PricingSection({
                         alt={service}
                         width={32}
                         height={32}
-                        className={`object-contain ${darkLogoServices.has(service) ? "brightness-0 invert" : ""}`}
+                        className="object-contain"
                       />
                     </div>
                   ))}
