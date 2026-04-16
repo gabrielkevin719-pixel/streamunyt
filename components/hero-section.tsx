@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { ArrowRight, Calculator } from "lucide-react";
+import Image from "next/image";
 
 const services = [
-  { name: "Netflix", color: "#E50914", price: "R$29,90" },
-  { name: "Spotify", color: "#1DB954", price: "R$21,90" },
-  { name: "Disney+", color: "#5B4FE8", price: "R$27,90" },
-  { name: "HBO Max", color: "#A855F7", price: "R$34,90" },
-  { name: "TNT Sports", color: "#FF00CC", price: "R$29,90" },
-  { name: "Amazon Prime", color: "#00A8E0", price: "R$19,90" },
-  { name: "YouTube Premium", color: "#FF0000", price: "R$20,90" },
+  { name: "Netflix", color: "#E50914", price: "R$29,90", logo: "/logos/netflix.png" },
+  { name: "Spotify", color: "#1DB954", price: "R$21,90", logo: "/logos/spotify.png" },
+  { name: "Disney+", color: "#5B4FE8", price: "R$27,90", logo: "/logos/disney-plus.jpg" },
+  { name: "HBO Max", color: "#A855F7", price: "R$34,90", logo: "/logos/hbo-max.png" },
+  { name: "TNT Sports", color: "#FF00CC", price: "R$29,90", logo: "/logos/tnt-sports.png" },
+  { name: "Amazon Prime", color: "#00A8E0", price: "R$19,90", logo: "/logos/prime-video.png" },
+  { name: "YouTube Premium", color: "#FF0000", price: "R$20,90", logo: "/logos/youtube.png" },
 ];
 
 function AnimatedCounter({
@@ -92,16 +93,29 @@ export function HeroSection() {
               </span>
             </h1>
 
+            {/* Service logos showcase */}
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              {services.map((service) => (
+                <div
+                  key={service.name}
+                  className="relative w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden flex items-center justify-center p-1.5 hover:scale-110 transition-transform"
+                  title={service.name}
+                >
+                  <Image
+                    src={service.logo}
+                    alt={service.name}
+                    width={28}
+                    height={28}
+                    className="object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
             {/* Subtext */}
             <p className="text-muted-foreground text-lg leading-relaxed max-w-xl mb-8">
-              StreamUnity agrega{" "}
-              <strong className="text-foreground">
-                Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime
-              </strong>{" "}
-              e{" "}
-              <strong className="text-foreground">YouTube Premium</strong>{" "}
-              em um unico plano mensal. Economize ate{" "}
-              <strong className="text-primary">R$127/mes</strong>.
+              StreamUnity agrega todos os seus servicos favoritos em um unico plano mensal. 
+              Economize ate <strong className="text-primary">R$127/mes</strong>.
             </p>
 
             {/* CTAs */}
@@ -149,7 +163,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right: Service Cards */}
+          {/* Right: Service Cards Orbital */}
           <div
             className={`relative transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
@@ -159,7 +173,7 @@ export function HeroSection() {
                 <span className="font-display text-4xl text-background">S</span>
               </div>
 
-              {/* Orbiting services */}
+              {/* Orbiting services with logos */}
               {services.map((service, index) => {
                 const angle = (index * 360) / services.length;
                 const radius = 180;
@@ -175,16 +189,19 @@ export function HeroSection() {
                     }}
                   >
                     <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg"
+                      className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden shadow-lg bg-white/10 backdrop-blur-sm p-2"
                       style={{
-                        backgroundColor: `${service.color}20`,
                         border: `2px solid ${service.color}60`,
                         boxShadow: `0 0 20px ${service.color}30`,
                       }}
                     >
-                      <span className="text-center leading-tight px-1">
-                        {service.name.split(" ")[0]}
-                      </span>
+                      <Image
+                        src={service.logo}
+                        alt={service.name}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                      />
                     </div>
                     {/* Tooltip */}
                     <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">

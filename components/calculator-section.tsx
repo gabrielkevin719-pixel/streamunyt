@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const services = [
-  { id: "netflix", name: "Netflix", price: 29.9 },
-  { id: "spotify", name: "Spotify", price: 21.9 },
-  { id: "disney", name: "Disney+", price: 27.9 },
-  { id: "hbomax", name: "HBO Max", price: 34.9 },
-  { id: "tnt", name: "TNT Sports", price: 29.9 },
-  { id: "amazon", name: "Amazon Prime", price: 19.9 },
-  { id: "youtube", name: "YouTube Premium", price: 20.9 },
+  { id: "netflix", name: "Netflix", price: 29.9, logo: "/logos/netflix.png" },
+  { id: "spotify", name: "Spotify", price: 21.9, logo: "/logos/spotify.png" },
+  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.jpg" },
+  { id: "hbomax", name: "HBO Max", price: 34.9, logo: "/logos/hbo-max.png" },
+  { id: "tnt", name: "TNT Sports", price: 29.9, logo: "/logos/tnt-sports.png" },
+  { id: "amazon", name: "Amazon Prime", price: 19.9, logo: "/logos/prime-video.png" },
+  { id: "youtube", name: "YouTube Premium", price: 20.9, logo: "/logos/youtube.png" },
 ];
 
 export function CalculatorSection() {
@@ -97,6 +98,17 @@ export function CalculatorSection() {
                   )}
                 </div>
 
+                {/* Service logo */}
+                <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden flex-shrink-0 p-1.5">
+                  <Image
+                    src={service.logo}
+                    alt={service.name}
+                    width={28}
+                    height={28}
+                    className="object-contain"
+                  />
+                </div>
+
                 {/* Service info */}
                 <div className="flex-1">
                   <span className="font-medium">{service.name}</span>
@@ -109,6 +121,30 @@ export function CalculatorSection() {
               </button>
             ))}
           </div>
+
+          {/* Selected services preview */}
+          {selected.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6 p-4 bg-white/5 rounded-xl">
+              <span className="text-sm text-muted-foreground mr-2">Selecionados:</span>
+              {services
+                .filter((s) => selected.includes(s.id))
+                .map((service) => (
+                  <div
+                    key={service.id}
+                    className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center overflow-hidden p-1"
+                    title={service.name}
+                  >
+                    <Image
+                      src={service.logo}
+                      alt={service.name}
+                      width={24}
+                      height={24}
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+            </div>
+          )}
 
           {/* Total bar */}
           <div className="bg-gradient-to-r from-primary/15 to-glow/5 border border-primary/30 rounded-2xl p-6">
