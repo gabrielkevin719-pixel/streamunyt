@@ -55,13 +55,13 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          <button className="text-muted-foreground hover:text-foreground text-sm font-medium px-4 py-2 rounded-lg hover:bg-foreground/5 transition-all">
-            Entrar
-          </button>
-          <button className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-2 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all">
-            Comecar Gratis
-          </button>
+        <div className="hidden md:flex items-center">
+          <Link
+            href="#planos"
+            className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-2 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all"
+          >
+            Inscrever-se
+          </Link>
         </div>
 
         <button
@@ -85,13 +85,14 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <div className="flex flex-col gap-2 pt-4 border-t border-border">
-              <button className="text-muted-foreground hover:text-foreground text-sm font-medium py-2">
-                Entrar
-              </button>
-              <button className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-3 rounded-xl">
-                Comecar Gratis
-              </button>
+            <div className="pt-4 border-t border-border">
+              <Link
+                href="#planos"
+                className="block text-center bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-3 rounded-xl"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Inscrever-se
+              </Link>
             </div>
           </div>
         </div>
