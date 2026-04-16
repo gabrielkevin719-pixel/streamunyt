@@ -53,8 +53,27 @@ function AnimatedCounter({
   );
 }
 
+function useOrbitalRadius() {
+  const [radius, setRadius] = useState(110);
+
+  useEffect(() => {
+    function update() {
+      const w = window.innerWidth;
+      if (w >= 768) setRadius(180);
+      else if (w >= 640) setRadius(140);
+      else setRadius(110);
+    }
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return radius;
+}
+
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const orbitalRadius = useOrbitalRadius();
 
   useEffect(() => {
     setIsVisible(true);
@@ -106,7 +125,7 @@ export function HeroSection() {
                     alt={service.name}
                     width={28}
                     height={28}
-                    className="object-contain mix-blend-screen brightness-110"
+                    className="object-contain mix-blend-screen brightness-110 w-auto h-auto max-w-full max-h-full"
                   />
                 </div>
               ))}
@@ -167,29 +186,28 @@ export function HeroSection() {
           <div
             className={`relative transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
           >
-            <div className="relative h-[500px] flex items-center justify-center">
+            <div className="relative h-[320px] sm:h-[400px] md:h-[500px] flex items-center justify-center">
               {/* Central hub */}
-              <div className="absolute w-24 h-24 rounded-full bg-gradient-to-br from-glow via-primary to-primary/80 flex items-center justify-center shadow-2xl shadow-primary/40 z-10">
-                <span className="font-display text-4xl text-background">S</span>
+              <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-glow via-primary to-primary/80 flex items-center justify-center shadow-2xl shadow-primary/40 z-10">
+                <span className="font-display text-2xl sm:text-3xl md:text-4xl text-background">S</span>
               </div>
 
               {/* Orbiting services with logos */}
               {services.map((service, index) => {
                 const angle = (index * 360) / services.length;
-                const radius = 180;
-                const x = Math.cos((angle * Math.PI) / 180) * radius;
-                const y = Math.sin((angle * Math.PI) / 180) * radius * 0.7;
+                const x = Math.cos((angle * Math.PI) / 180) * orbitalRadius;
+                const y = Math.sin((angle * Math.PI) / 180) * orbitalRadius;
 
                 return (
                   <div
                     key={service.name}
-                    className="absolute transition-all duration-300 hover:scale-110 group"
+                    className="absolute transition-all duration-500 hover:scale-110 group"
                     style={{
                       transform: `translate(${x}px, ${y}px)`,
                     }}
                   >
                     <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden shadow-lg bg-transparent backdrop-blur-sm p-2"
+                      className="w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center overflow-hidden shadow-lg bg-transparent backdrop-blur-sm p-1.5 sm:p-2"
                       style={{
                         border: `2px solid ${service.color}60`,
                         boxShadow: `0 0 20px ${service.color}30`,
@@ -200,33 +218,55 @@ export function HeroSection() {
                         alt={service.name}
                         width={40}
                         height={40}
-                        className="object-contain mix-blend-screen brightness-110"
+                        className="object-contain mix-blend-screen brightness-110 w-auto h-auto max-w-full max-h-full"
                       />
                     </div>
                     {/* Tooltip */}
-                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap hidden sm:block">
                       <span className="bg-popover border border-border rounded-lg px-3 py-1.5 text-xs">
                         {service.name} - {service.price}/mes
                       </span>
                     </div>
-                    {/* Connector line */}
-                    <svg
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none -z-10"
-                      style={{ opacity: 0.3 }}
-                    >
-                      <line
-                        x1="200"
-                        y1="200"
-                        x2={200 - x}
-                        y2={200 - y}
-                        stroke={service.color}
-                        strokeWidth="1"
-                        strokeDasharray="5,10"
-                      />
-                    </svg>
                   </div>
                 );
               })}
+
+              {/* Connector lines drawn from center */}
+              {(() => {
+                const svgSize = orbitalRadius * 2 + 80;
+                const center = svgSize / 2;
+                return (
+                  <svg
+                    className="absolute pointer-events-none"
+                    width={svgSize}
+                    height={svgSize}
+                    style={{
+                      opacity: 0.25,
+                      top: "50%",
+                      left: "50%",
+                      transform: `translate(-50%, -50%)`,
+                    }}
+                  >
+                    {services.map((service, index) => {
+                      const angle = (index * 360) / services.length;
+                      const endX = center + Math.cos((angle * Math.PI) / 180) * orbitalRadius;
+                      const endY = center + Math.sin((angle * Math.PI) / 180) * orbitalRadius;
+                      return (
+                        <line
+                          key={service.name}
+                          x1={center}
+                          y1={center}
+                          x2={endX}
+                          y2={endY}
+                          stroke={service.color}
+                          strokeWidth="1"
+                          strokeDasharray="4,8"
+                        />
+                      );
+                    })}
+                  </svg>
+                );
+              })()}
             </div>
           </div>
         </div>
