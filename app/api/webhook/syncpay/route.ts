@@ -1,84 +1,120 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// SyncPay Webhook Handler
-// Receives payment status updates from SyncPay
+/**
+ * SyncPay Webhook Handler
+ *
+ * Events come via headers:
+ *   - event: "cashin.create" | "cashin.update"
+ *   - Authorization: "Bearer {TOKEN}"
+ *
+ * Body format (both events):
+ * {
+ *   "data": {
+ *     "id": "uuid",
+ *     "client": { "name", "email", "document" },
+ *     "pix_code": "...",
+ *     "amount": 10,
+ *     "final_amount": 9.4,
+ *     "currency": "BRL",
+ *     "status": "pending" | "completed" | "failed" | "refunded" | "med",
+ *     "payment_method": "PIX",
+ *     "created_at": "...",
+ *     "updated_at": "...",
+ *     // Only on update:
+ *     "end_to_end": "...",
+ *     "debtor_account": { "name", "document" }
+ *   }
+ * }
+ *
+ * IMPORTANT: All webhooks have a 5 second timeout.
+ */
 
-interface SyncPayWebhookPayload {
-  event: string;
-  identifier: string;
-  status: string;
-  amount: number;
-  paid_at?: string;
-  created_at?: string;
-  updated_at?: string;
-  client?: {
+interface SyncPayWebhookData {
+  id: string;
+  end_to_end?: string;
+  client: {
     name: string;
-    cpf: string;
     email: string;
-    phone: string;
+    document: string;
   };
+  debtor_account?: {
+    name: string;
+    document: string;
+  };
+  pix_code: string;
+  amount: number;
+  final_amount: number;
+  currency: string;
+  status: "pending" | "completed" | "failed" | "refunded" | "med";
+  payment_method: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const payload: SyncPayWebhookPayload = await request.json();
+    // Event type comes from header
+    const event = request.headers.get("event") || "unknown";
+    const payload: { data: SyncPayWebhookData } = await request.json();
+    const { data } = payload;
 
-    console.log("[SyncPay Webhook] Received:", JSON.stringify(payload, null, 2));
+    console.log(
+      `[SyncPay Webhook] Event: ${event} | ID: ${data.id} | Status: ${data.status} | Amount: R$ ${data.amount}`
+    );
 
-    const { event, identifier, status, amount, paid_at, client } = payload;
-
-    // Handle different webhook events
     switch (event) {
-      case "cashin.created":
-        console.log(`[SyncPay] Payment created: ${identifier} - Amount: R$ ${amount}`);
+      case "cashin.create":
+        console.log(
+          `[SyncPay] Payment created: ${data.id} - Client: ${data.client.name} <${data.client.email}>`
+        );
         break;
 
-      case "cashin.updated":
-      case "cashin.completed":
-      case "cashin.paid":
-        console.log(`[SyncPay] Payment updated: ${identifier} - Status: ${status}`);
-        
-        if (status === "completed" || status === "paid") {
-          console.log(`[SyncPay] Payment CONFIRMED: ${identifier}`);
-          console.log(`[SyncPay] Client: ${client?.name} <${client?.email}>`);
-          console.log(`[SyncPay] Amount: R$ ${amount}`);
-          console.log(`[SyncPay] Paid at: ${paid_at}`);
-          
+      case "cashin.update":
+        console.log(
+          `[SyncPay] Payment updated: ${data.id} - Status: ${data.status}`
+        );
+
+        if (data.status === "completed") {
+          console.log(`[SyncPay] Payment CONFIRMED: ${data.id}`);
+          console.log(
+            `[SyncPay] Client: ${data.client.name} <${data.client.email}>`
+          );
+          console.log(`[SyncPay] Amount: R$ ${data.amount} (final: R$ ${data.final_amount})`);
+          console.log(`[SyncPay] End-to-end: ${data.end_to_end}`);
+
+          if (data.debtor_account) {
+            console.log(
+              `[SyncPay] Debtor: ${data.debtor_account.name} (${data.debtor_account.document})`
+            );
+          }
+
           // TODO: Add your business logic here
-          // - Update database
-          // - Send confirmation email
-          // - Activate subscription
-          // - etc.
+          // - Update database with payment confirmation
+          // - Send confirmation email to client
+          // - Activate subscription for the user
         }
-        break;
 
-      case "cashin.expired":
-        console.log(`[SyncPay] Payment expired: ${identifier}`);
-        break;
+        if (data.status === "failed") {
+          console.log(`[SyncPay] Payment FAILED: ${data.id}`);
+          // TODO: Handle failed payment
+        }
 
-      case "cashin.failed":
-        console.log(`[SyncPay] Payment failed: ${identifier}`);
+        if (data.status === "refunded") {
+          console.log(`[SyncPay] Payment REFUNDED: ${data.id}`);
+          // TODO: Handle refund
+        }
         break;
 
       default:
         console.log(`[SyncPay] Unknown event: ${event}`);
     }
 
-    // Always return 200 to acknowledge receipt
-    return NextResponse.json({
-      success: true,
-      message: "Webhook received",
-      identifier,
-    });
+    // Always return 200 to acknowledge receipt (within 5s timeout)
+    return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[SyncPay Webhook] Error:", err);
-    
     // Return 200 even on error to prevent retries
-    // Log the error for debugging
-    return NextResponse.json({
-      success: false,
-      message: "Webhook processing error",
-    });
+    return NextResponse.json({ success: false });
   }
 }
 
