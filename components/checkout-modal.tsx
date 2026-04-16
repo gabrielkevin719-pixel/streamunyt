@@ -21,16 +21,37 @@ const planDetails: Record<
 
 type Step = "form" | "loading" | "pix";
 
+// CPF mask
+function formatCPF(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+  if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+}
+
+// Phone mask
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
 export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
   const [step, setStep] = useState<Step>("form");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({});
+  const [cpf, setCpf] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errors, setErrors] = useState<{ name?: string; email?: string; cpf?: string; phone?: string }>({});
   const [pixData, setPixData] = useState<{
     brCode: string;
     qrCodeImage: string;
     correlationID: string;
     expiresAt: string;
+    demo?: boolean;
+    message?: string;
   } | null>(null);
   const [copied, setCopied] = useState(false);
   const [countdown, setCountdown] = useState(3600);
@@ -47,6 +68,8 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
         setStep("form");
         setName("");
         setEmail("");
+        setCpf("");
+        setPhone("");
         setErrors({});
         setPixData(null);
         setCopied(false);
@@ -68,7 +91,7 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
 
   // Poll for payment status
   useEffect(() => {
-    if (step === "pix" && pixData?.correlationID) {
+    if (step === "pix" && pixData?.correlationID && !pixData.demo) {
       const pollStatus = async () => {
         try {
           const res = await fetch(
@@ -89,11 +112,21 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
   }, [step, pixData]);
 
   const validateForm = () => {
-    const newErrors: { name?: string; email?: string } = {};
+    const newErrors: { name?: string; email?: string; cpf?: string; phone?: string } = {};
+    
     if (!name.trim()) newErrors.name = "Nome e obrigatorio";
+    
     if (!email.trim()) newErrors.email = "E-mail e obrigatorio";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      newErrors.email = "E-mail invalido";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "E-mail invalido";
+    
+    const cpfDigits = cpf.replace(/\D/g, "");
+    if (!cpfDigits) newErrors.cpf = "CPF e obrigatorio";
+    else if (cpfDigits.length !== 11) newErrors.cpf = "CPF deve ter 11 digitos";
+    
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (!phoneDigits) newErrors.phone = "Telefone e obrigatorio";
+    else if (phoneDigits.length < 10 || phoneDigits.length > 11) newErrors.phone = "Telefone invalido";
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -107,7 +140,13 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
       const res = await fetch("/api/payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, plano: planId }),
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          cpf: cpf.replace(/\D/g, ""),
+          phone: phone.replace(/\D/g, ""),
+          plano: planId 
+        }),
       });
       const data = await res.json();
 
@@ -117,6 +156,8 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
           qrCodeImage: data.qrCodeImage,
           correlationID: data.correlationID,
           expiresAt: data.expiresAt,
+          demo: data.demo,
+          message: data.message,
         });
         setStep("pix");
       } else {
@@ -222,6 +263,48 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
                   </p>
                 )}
               </div>
+
+              <div>
+                <label className="font-mono text-xs text-muted-foreground tracking-wider block mb-2">
+                  CPF
+                </label>
+                <input
+                  type="text"
+                  value={cpf}
+                  onChange={(e) => setCpf(formatCPF(e.target.value))}
+                  className={cn(
+                    "w-full bg-secondary border rounded-xl px-4 py-3 text-foreground outline-none transition-all",
+                    errors.cpf
+                      ? "border-destructive"
+                      : "border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
+                  )}
+                  placeholder="000.000.000-00"
+                />
+                {errors.cpf && (
+                  <p className="text-destructive text-xs mt-1">{errors.cpf}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="font-mono text-xs text-muted-foreground tracking-wider block mb-2">
+                  TELEFONE
+                </label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(formatPhone(e.target.value))}
+                  className={cn(
+                    "w-full bg-secondary border rounded-xl px-4 py-3 text-foreground outline-none transition-all",
+                    errors.phone
+                      ? "border-destructive"
+                      : "border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
+                  )}
+                  placeholder="(11) 99999-9999"
+                />
+                {errors.phone && (
+                  <p className="text-destructive text-xs mt-1">{errors.phone}</p>
+                )}
+              </div>
             </div>
 
             <button
@@ -272,6 +355,15 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
                 <h3 className="font-display text-2xl mb-6">
                   Escaneie o QR Code
                 </h3>
+
+                {/* Demo warning */}
+                {pixData.demo && (
+                  <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3 mb-4">
+                    <p className="text-yellow-500 text-xs text-center">
+                      {pixData.message || "Modo demonstracao - Configure SYNCPAY_API_KEY para pagamentos reais"}
+                    </p>
+                  </div>
+                )}
 
                 {/* QR Code */}
                 <div className="bg-popover rounded-2xl p-6 text-center mb-4">

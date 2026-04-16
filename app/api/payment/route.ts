@@ -1,41 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import QRCode from "qrcode";
 
-// Plan prices in cents for the API
+// Plan prices in BRL
 const PLANOS: Record<string, { nome: string; valor: number }> = {
-  basico: { nome: "Basico Essencial", valor: 6900 },
-  premium: { nome: "Premium Total", valor: 10900 },
-  ultra: { nome: "Ultra Maximo", valor: 14900 },
+  basico: { nome: "Basico Essencial", valor: 69.00 },
+  premium: { nome: "Premium Total", valor: 109.00 },
+  ultra: { nome: "Ultra Maximo", valor: 149.00 },
 };
 
-// CRC16 CCITT - required for PIX payload
-function calcCRC16(str: string): string {
-  let crc = 0xffff;
-  for (let i = 0; i < str.length; i++) {
-    crc ^= str.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
-      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
-    }
-  }
-  return (crc & 0xffff).toString(16).toUpperCase().padStart(4, "0");
-}
-
-// Generate demo PIX response
+// Generate demo PIX response when API key is not configured
 async function generateDemoPixResponse(
   planoData: { nome: string; valor: number },
   correlationID: string,
   name: string,
   email: string
 ) {
-  // PIX static payload (demo only)
-  const pixPayload =
-    "00020126580014BR.GOV.BCB.PIX0136streamunity@demo.com" +
-    `5204000053039865802BR5925STREAMUNITY DEMO6009SAO PAULO` +
-    `62070503***6304`;
-  const crc = calcCRC16(pixPayload);
-  const brCode = pixPayload + crc;
+  const demoPixCode = `00020126580014BR.GOV.BCB.PIX0136${correlationID}@demo.streamunity.com.br5204000053039865802BR5925STREAMUNITY DEMO6009SAO PAULO62070503***6304`;
 
-  const qrCodeImage = await QRCode.toDataURL(brCode, {
+  const qrCodeImage = await QRCode.toDataURL(demoPixCode, {
     width: 300,
     margin: 2,
     color: { dark: "#000000", light: "#ffffff" },
@@ -49,19 +31,19 @@ async function generateDemoPixResponse(
     success: true,
     demo: true,
     correlationID,
-    brCode,
+    brCode: demoPixCode,
     qrCodeImage,
     expiresAt,
-    valor: (planoData.valor / 100).toFixed(2),
+    valor: planoData.valor.toFixed(2),
     plano: planoData.nome,
-    status: "ACTIVE",
-    message: "MODO DEMO - Configure OPENPIX_API_KEY para pagamentos reais.",
+    status: "PENDING",
+    message: "MODO DEMO - Configure SYNCPAY_API_KEY para pagamentos reais.",
   };
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, plano } = await request.json();
+    const { name, email, cpf, phone, plano } = await request.json();
 
     // Basic validation
     if (!name || !email || !plano) {
@@ -85,8 +67,8 @@ export async function POST(request: NextRequest) {
     const planoData = PLANOS[plano];
     const correlationID = `su-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    // Check if OpenPix API key is configured
-    const apiKey = process.env.OPENPIX_API_KEY;
+    // Check if SyncPay API key is configured
+    const apiKey = process.env.SYNCPAY_API_KEY;
 
     if (!apiKey) {
       // Return demo response
@@ -99,78 +81,79 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(demoResponse);
     }
 
-    // Call OpenPix API
+    // Call SyncPay API - Cash-in (deposit via PIX)
     try {
-      const openpixRes = await fetch(
-        "https://api.openpix.com.br/api/v1/charge",
-        {
-          method: "POST",
-          headers: {
-            Authorization: apiKey,
-            "Content-Type": "application/json",
+      const baseUrl = process.env.SYNCPAY_API_URL || "https://api.syncpayments.com.br";
+      const webhookUrl = process.env.SYNCPAY_WEBHOOK_URL || `${request.nextUrl.origin}/api/webhook/syncpay`;
+
+      const syncpayRes = await fetch(`${baseUrl}/api/partner/v1/cash-in`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          amount: planoData.valor,
+          description: `StreamUnity - Plano ${planoData.nome}`,
+          webhook_url: webhookUrl,
+          client: {
+            name: name,
+            cpf: cpf?.replace(/\D/g, "") || "00000000000",
+            email: email,
+            phone: phone?.replace(/\D/g, "") || "11999999999",
           },
-          body: JSON.stringify({
-            correlationID,
-            value: planoData.valor,
-            comment: `StreamUnity - Plano ${planoData.nome}`,
-            expiresIn: 3600,
-            customer: {
-              name,
-              email,
-              taxID: { taxID: "00000000000", type: "CPF" },
-            },
-            additionalInfo: [
-              { key: "Plano", value: planoData.nome },
-              { key: "E-mail", value: email },
-            ],
-          }),
-        }
-      );
+        }),
+      });
 
-      const openpixData = await openpixRes.json();
+      const syncpayData = await syncpayRes.json();
 
-      if (!openpixRes.ok || openpixData.error) {
-        console.error("OpenPix error:", openpixData);
+      if (!syncpayRes.ok || syncpayData.message === "Unauthenticated.") {
+        console.error("SyncPay error:", syncpayData);
+        // Fallback to demo mode if API fails
         const demoResponse = await generateDemoPixResponse(
           planoData,
           correlationID,
           name,
           email
         );
-        return NextResponse.json(demoResponse);
-      }
-
-      const charge = openpixData.charge;
-
-      // Generate QR Code as base64 if API doesn't return one
-      let qrCodeImage = charge.qrCodeImage;
-      if (!qrCodeImage && charge.brCode) {
-        qrCodeImage = await QRCode.toDataURL(charge.brCode, {
-          width: 300,
-          margin: 2,
-          color: { dark: "#000000", light: "#ffffff" },
+        return NextResponse.json({
+          ...demoResponse,
+          message: `Erro na API SyncPay: ${syncpayData.message || "Erro desconhecido"}. Usando modo demo.`,
         });
       }
 
+      // Generate QR Code image from pix_code
+      const qrCodeImage = await QRCode.toDataURL(syncpayData.pix_code, {
+        width: 300,
+        margin: 2,
+        color: { dark: "#000000", light: "#ffffff" },
+      });
+
+      const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString();
+
       return NextResponse.json({
         success: true,
-        correlationID: charge.correlationID,
-        brCode: charge.brCode,
+        correlationID: syncpayData.identifier,
+        brCode: syncpayData.pix_code,
         qrCodeImage,
-        expiresAt: charge.expiresDate,
-        valor: (planoData.valor / 100).toFixed(2),
+        expiresAt,
+        valor: planoData.valor.toFixed(2),
         plano: planoData.nome,
-        status: charge.status,
+        status: "PENDING",
       });
     } catch (err) {
-      console.error("OpenPix connection error:", err);
+      console.error("SyncPay connection error:", err);
       const demoResponse = await generateDemoPixResponse(
         planoData,
         correlationID,
         name,
         email
       );
-      return NextResponse.json(demoResponse);
+      return NextResponse.json({
+        ...demoResponse,
+        message: "Erro de conexao com SyncPay. Usando modo demo.",
+      });
     }
   } catch (err) {
     console.error("Request error:", err);

@@ -7,34 +7,65 @@ export async function GET(
   const { correlationID } = await params;
 
   try {
-    const apiKey = process.env.OPENPIX_API_KEY;
+    const apiKey = process.env.SYNCPAY_API_KEY;
 
     if (!apiKey) {
-      // Demo mode - always return active
+      // Demo mode - return pending status
       return NextResponse.json({
-        status: "ACTIVE",
+        status: "PENDING",
         paidAt: null,
+        demo: true,
       });
     }
 
-    const openpixRes = await fetch(
-      `https://api.openpix.com.br/api/v1/charge/${correlationID}`,
+    const baseUrl = process.env.SYNCPAY_API_URL || "https://api.syncpayments.com.br";
+
+    // Call SyncPay API to check transaction status
+    const syncpayRes = await fetch(
+      `${baseUrl}/api/partner/v1/transactions/${correlationID}`,
       {
         headers: {
-          Authorization: apiKey,
+          "Authorization": `Bearer ${apiKey}`,
+          "Accept": "application/json",
         },
       }
     );
 
-    const data = await openpixRes.json();
+    const data = await syncpayRes.json();
+
+    if (!syncpayRes.ok) {
+      console.error("SyncPay status check error:", data);
+      return NextResponse.json({
+        status: "PENDING",
+        paidAt: null,
+        error: data.message,
+      });
+    }
+
+    // Map SyncPay status to our status format
+    // SyncPay statuses: pending, processing, completed, failed, expired
+    const statusMap: Record<string, string> = {
+      pending: "PENDING",
+      processing: "PROCESSING",
+      completed: "COMPLETED",
+      paid: "COMPLETED",
+      failed: "FAILED",
+      expired: "EXPIRED",
+      cancelled: "CANCELLED",
+    };
+
+    const status = statusMap[data.status?.toLowerCase()] || data.status || "PENDING";
 
     return NextResponse.json({
-      status: data.charge?.status || "ACTIVE",
-      paidAt: data.charge?.paidAt || null,
+      status,
+      paidAt: data.paid_at || data.completed_at || null,
+      identifier: data.identifier,
+      amount: data.amount,
     });
-  } catch {
+  } catch (err) {
+    console.error("Status check error:", err);
     return NextResponse.json({
-      status: "ACTIVE",
+      status: "PENDING",
       paidAt: null,
     });
   }
