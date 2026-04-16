@@ -7,7 +7,7 @@ import Image from "next/image";
 const services = [
   { id: "netflix", name: "Netflix", price: 29.9, logo: "/logos/netflix.png" },
   { id: "spotify", name: "Spotify", price: 21.9, logo: "/logos/spotify.png" },
-  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.jpg" },
+  { id: "disney", name: "Disney+", price: 27.9, logo: "/logos/disney-plus.png" },
   { id: "hbomax", name: "HBO Max", price: 34.9, logo: "/logos/hbo-max.png" },
   { id: "tnt", name: "TNT Sports", price: 29.9, logo: "/logos/tnt-sports.png" },
   { id: "amazon", name: "Amazon Prime", price: 19.9, logo: "/logos/prime-video.png" },
