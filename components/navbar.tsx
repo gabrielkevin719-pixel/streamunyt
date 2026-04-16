@@ -91,7 +91,7 @@ export function Navbar() {
                 className="block text-center bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-bold text-sm px-5 py-3 rounded-xl"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Inscrever-se
+                Ver Planos e Preco
               </Link>
             </div>
           </div>
