@@ -33,12 +33,17 @@ export const metadata: Metadata = {
     "streamix",
   ],
   authors: [{ name: "Streamix" }],
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Streamix — TV, Musica e Entretenimento em Um So Lugar.",
     description:
       "Agregue todas as suas assinaturas de streaming em um unico plano mensal.",
     type: "website",
     locale: "pt_BR",
+    images: ["/logo.png"],
   },
 };
 

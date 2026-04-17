@@ -188,16 +188,14 @@ export function HeroSection() {
           >
             <div className="relative h-[320px] sm:h-[400px] md:h-[500px] flex items-center justify-center">
               {/* Central hub */}
-              <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl bg-[#0D1425] border border-[#1C2A44] flex items-center justify-center shadow-2xl shadow-[#A855F7]/20 z-10">
-                <svg className="w-8 h-10 sm:w-10 sm:h-12 md:w-12 md:h-14" viewBox="0 0 120 160" fill="none">
-                  <path d="M 90,10 C 115,10 20,55 50,65 L 80,72 L 50,80 C 20,88 115,130 90,140" stroke="url(#hubGrad)" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                  <defs>
-                    <linearGradient id="hubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#A855F7"/>
-                      <stop offset="100%" stopColor="#3B82F6"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
+              <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl bg-[#0D1425] border border-[#1C2A44] flex items-center justify-center shadow-2xl shadow-[#A855F7]/20 z-10 overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="Streamix Logo"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Orbiting services with logos */}
