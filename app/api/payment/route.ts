@@ -4,9 +4,9 @@ import { createCashIn } from "@/lib/syncpay";
 
 // Plan prices in BRL
 const PLANOS: Record<string, { nome: string; valor: number }> = {
-  basico: { nome: "Basico Essencial", valor: 69.0 },
-  premium: { nome: "Premium Total", valor: 109.0 },
-  ultra: { nome: "Ultra Maximo", valor: 149.0 },
+  basico: { nome: "Basico Essencial", valor: 50.0 },
+  premium: { nome: "Premium Total", valor: 79.9 },
+  ultra: { nome: "Ultra Maximo", valor: 129.9 },
 };
 
 // Generate demo PIX response when credentials are not configured
