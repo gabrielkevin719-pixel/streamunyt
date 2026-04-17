@@ -14,9 +14,9 @@ const planDetails: Record<
   string,
   { name: string; price: number; description: string }
 > = {
-  basico: { name: "Basico Essencial", price: 69, description: "3 servicos" },
-  premium: { name: "Premium Total", price: 109, description: "5 servicos" },
-  ultra: { name: "Ultra Maximo", price: 149, description: "7 servicos" },
+  basico: { name: "Basico Essencial", price: 50, description: "3 servicos" },
+  premium: { name: "Premium Total", price: 79.9, description: "5 servicos" },
+  ultra: { name: "Ultra Maximo", price: 129.9, description: "7 servicos" },
 };
 
 type Step = "form" | "loading" | "pix";
@@ -214,7 +214,7 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
                 </p>
               </div>
               <p className="font-display text-2xl text-primary">
-                R${plan.price}
+                R${plan.price.toFixed(2).replace('.', ',')}
               </p>
             </div>
 
@@ -414,7 +414,7 @@ export function CheckoutModal({ isOpen, onClose, planId }: CheckoutModalProps) {
                 <div className="mt-6 text-center">
                   <p className="text-sm text-muted-foreground">Valor:</p>
                   <p className="font-display text-3xl text-primary">
-                    R${plan.price},00
+                    R${plan.price.toFixed(2).replace('.', ',')}
                   </p>
                 </div>
               </>
