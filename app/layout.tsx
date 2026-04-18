@@ -19,9 +19,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Streamix — TV, Musica e Entretenimento em Um So Lugar.",
+  title: "Streamixx — TV, Musica e Entretenimento em Um So Lugar.",
   description:
-    "Streamix agrega Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime e YouTube Premium em um unico plano mensal. Economize ate R$127/mes.",
+    "Streamixx agrega Netflix, Spotify, Disney+, HBO Max, TNT Sports, Amazon Prime e YouTube Premium em um unico plano mensal. Economize ate R$127/mes.",
   keywords: [
     "streaming",
     "netflix",
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     "hbo max",
     "assinatura",
     "economia",
-    "streamix",
+    "streamixx",
   ],
-  authors: [{ name: "Streamix" }],
+  authors: [{ name: "Streamixx" }],
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Streamix — TV, Musica e Entretenimento em Um So Lugar.",
+    title: "Streamixx — TV, Musica e Entretenimento em Um So Lugar.",
     description:
       "Agregue todas as suas assinaturas de streaming em um unico plano mensal.",
     type: "website",

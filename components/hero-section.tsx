@@ -133,7 +133,7 @@ export function HeroSection() {
 
             {/* Subtext */}
             <p className="text-muted-foreground text-lg leading-relaxed max-w-xl mb-8">
-              Streamix agrega todos os seus servicos favoritos em um unico plano mensal. 
+              Streamixx agrega todos os seus servicos favoritos em um unico plano mensal. 
               Economize ate <strong className="text-primary">R$127/mes</strong>.
             </p>
 
@@ -191,7 +191,7 @@ export function HeroSection() {
               <div className="absolute w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-2xl bg-[#0D1425] border border-[#1C2A44] flex items-center justify-center shadow-2xl shadow-[#A855F7]/20 z-10 overflow-hidden">
                 <Image
                   src="/logo.png"
-                  alt="Streamix Logo"
+                  alt="Streamixx Logo"
                   width={96}
                   height={96}
                   className="w-full h-full object-cover"
