@@ -31,16 +31,16 @@ export function CalculatorSection() {
     .filter((s) => selected.includes(s.id))
     .reduce((acc, s) => acc + s.price, 0);
 
-  // Streamix pricing logic
-  const getStreamixPrice = () => {
+  // Streamixx pricing logic
+  const getStreamixxPrice = () => {
     const count = selected.length;
     if (count <= 3) return 50;
     if (count <= 5) return 79.9;
     return 129.9;
   };
 
-  const streamixPrice = getStreamixPrice();
-  const savings = totalIndividual - streamixPrice;
+  const streamixxPrice = getStreamixxPrice();
+  const savings = totalIndividual - streamixxPrice;
 
   return (
     <section id="calculadora" className="py-32 px-6 relative">
@@ -159,10 +159,10 @@ export function CalculatorSection() {
               </div>
               <div>
                 <p className="font-mono text-xs text-muted-foreground mb-2 tracking-wider">
-                  PAGA COM STREAMIX
+                  PAGA COM STREAMIXX
                 </p>
                 <p className="font-display text-3xl text-primary">
-                  R${streamixPrice.toFixed(2).replace(".", ",")}
+                  R${streamixxPrice.toFixed(2).replace(".", ",")}
                 </p>
               </div>
               <div>

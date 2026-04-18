@@ -29,7 +29,7 @@ const steps = [
     badgeColor: "bg-mint/10 text-mint border-mint/30",
     title: "Dashboard Unificado",
     description:
-      "Acesse o painel Streamix e gerencie todas as assinaturas em um so lugar. Veja datas de vencimento, uso por plataforma, historico e receba alertas de renovacao automatica.",
+      "Acesse o painel Streamixx e gerencie todas as assinaturas em um so lugar. Veja datas de vencimento, uso por plataforma, historico e receba alertas de renovacao automatica.",
     footer: "App iOS - Android - Web",
     footerColor: "text-mint",
   },

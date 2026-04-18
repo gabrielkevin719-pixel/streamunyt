@@ -20,7 +20,7 @@ export function Footer() {
                 </svg>
               </div>
               <span className="font-display text-xl tracking-wider italic">
-                STREAM<span className="bg-gradient-to-r from-[#A855F7] to-[#6366F1] bg-clip-text text-transparent">IX</span>
+                STREAM<span className="bg-gradient-to-r from-[#A855F7] to-[#6366F1] bg-clip-text text-transparent">IXX</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
@@ -103,7 +103,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            2026 Streamix. Prototipo conceitual para fins de estudo.
+            2026 Streamixx. Prototipo conceitual para fins de estudo.
           </p>
           <div className="flex items-center gap-1">
             <span className="text-muted-foreground text-sm">Feito com</span>
